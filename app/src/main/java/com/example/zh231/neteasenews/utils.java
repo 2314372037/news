@@ -15,9 +15,11 @@ public class utils {
      * 重置选择
      * @param textView
      */
-    public void resetSeleceed(TextView textView){
-        if (textView.isSelected()){
-            textView.setSelected(false);
+    public void resetSeleceed(TextView...textView){
+        for (int i=0;i<textView.length;i++){
+            if (textView[i].isSelected()){
+                textView[i].setSelected(false);
+            }
         }
     }
 

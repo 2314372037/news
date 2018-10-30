@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (v.getId()){
             case R.id.text_home:
-                new utils().resetSeleceed(tv_home);
+                new utils().resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
                 tv_home.setSelected(true);
                 if (fragments.indexOf(new fragment_home())==-1){//-1为空
                     fragments.add(new fragment_home());
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.text_video:
-                new utils().resetSeleceed(tv_video);
+                new utils().resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
                 tv_video.setSelected(true);
                 if (fragments.indexOf(new fragment_video())==-1){//-1为空
                     fragments.add(new fragment_video());
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.text_jj:
-                new utils().resetSeleceed(tv_jj);
+                new utils().resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
                 tv_jj.setSelected(true);
                 if (fragments.indexOf(new fragment_jj())==-1){
                     fragments.add(new fragment_jj());
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.text_me:
-                new utils().resetSeleceed(tv_me);
+                new utils().resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
                 tv_me.setSelected(true);
                 if (fragments.indexOf(new fragment_me())==-1){
                     fragments.add(new fragment_me());

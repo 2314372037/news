@@ -1,6 +1,7 @@
 package com.example.zh231.neteasenews;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -61,7 +62,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_jj.setOnClickListener(this);
         tv_me.setOnClickListener(this);
         fragments=new ArrayList<Fragment>();
-        tv_home.getCompoundDrawables();
+
+        //设置drawableTop大小
+        int drawable_width=72;
+        int drawable_height=72;
+        Drawable drawable_home = getDrawable(R.drawable.tab_menu_home_image);
+        drawable_home.setBounds(0,0,drawable_width,drawable_height);
+        tv_home.setCompoundDrawables(null,drawable_home,null,null);
+
+        Drawable drawable_video = getDrawable(R.drawable.tab_menu_video_image);
+        drawable_video.setBounds(0,0,drawable_width,drawable_height);
+        tv_video.setCompoundDrawables(null,drawable_video,null,null);
+
+        Drawable drawable_jj = getDrawable(R.drawable.tab_menu_jj_image);
+        drawable_jj.setBounds(0,0,drawable_width,drawable_height);
+        tv_jj.setCompoundDrawables(null,drawable_jj,null,null);
+
+        Drawable drawable_me = getDrawable(R.drawable.tab_menu_me_image);
+        drawable_me.setBounds(0,0,drawable_width,drawable_height);
+        tv_me.setCompoundDrawables(null,drawable_me,null,null);
     }
 
     @Override

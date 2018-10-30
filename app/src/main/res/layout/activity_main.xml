@@ -9,56 +9,44 @@
     <LinearLayout
         android:id="@+id/tab_menu"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="46dp"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true">
 
         <TextView
             android:id="@+id/text_home"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/transparent"
-            android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_menu_home_image"
+            style="@style/titleText"
             android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
             android:text="@string/home"/>
 
         <TextView
             android:id="@+id/text_video"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/transparent"
-            android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_menu_video_image"
+            style="@style/titleText"
             android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
             android:text="@string/video"/>
 
         <TextView
             android:id="@+id/text_jj"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/transparent"
-            android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_menu_jj_image"
+            style="@style/titleText"
             android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
             android:text="@string/jj"/>
 
         <TextView
             android:id="@+id/text_me"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/transparent"
-            android:drawablePadding="3dp"
-            android:drawableTop="@drawable/tab_menu_me_image"
+            style="@style/titleText"
             android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
             android:text="@string/me"/>
 
     </LinearLayout>

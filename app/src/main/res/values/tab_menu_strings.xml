@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">首页</string>
+    <string name="video">视频</string>
+    <string name="jj">讲讲</string>
+    <string name="me">我</string>
+</resources>

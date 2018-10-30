@@ -63,4 +63,12 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/fragment_frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/tab_menu"
+        android:background="@color/transparent">
+    </FrameLayout>
+
 </RelativeLayout>

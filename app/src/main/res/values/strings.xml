@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">neteasenews</string>
+
+    <string name="text_home">首页</string>
+
+    <string name="text_video">视频</string>
+
+    <string name="text_jj">讲讲</string>
+
+    <string name="text_me">我</string>
 </resources>

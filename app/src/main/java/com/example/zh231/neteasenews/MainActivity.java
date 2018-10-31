@@ -1,7 +1,9 @@
 package com.example.zh231.neteasenews;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -9,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FrameLayout fragment_frameLayout;
     private FragmentManager fragmentManager;
     private ArrayList<Fragment> fragments;
+    FragmentTransaction fragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void initActivity(){
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     /**
@@ -62,7 +71,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_jj.setOnClickListener(this);
         tv_me.setOnClickListener(this);
         fragments=new ArrayList<Fragment>();
+        if (tv_home!=null){//默认选择
+            tv_home.setSelected(true);
+            fragmentTransaction=getSupportFragmentManager().beginTransaction();
 
+            for (int i=0;i<fragments.size();i++){
+                fragments.remove(i);
+            }
+            if (fragments.indexOf(new fragment_home())==-1){//-1为空
+                fragments.add(new fragment_home());
+                fragmentTransaction.add(R.id.fragment_frameLayout,fragments.get(0));
+            }else{
+                fragmentTransaction.show(fragments.get(0));
+            }
+            fragmentTransaction.commit();
+
+        }
         //设置drawableTop大小
         int drawable_width=72;
         int drawable_height=72;
@@ -86,7 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        fragmentTransaction=getSupportFragmentManager().beginTransaction();
+
         for (int i=0;i<fragments.size();i++){
             new utils().hideFragment(fragments.get(i),fragmentTransaction);//隐藏全部Fragment
             fragments.remove(i);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<TextView
+    android:id="@+id/newsTitleTextView"
+    android:singleLine="false"
+    android:layout_margin="10dp"
+    android:textSize="20dp"
+    android:text="加载中..."
+    android:textColor="@color/titleColor"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+</LinearLayout>

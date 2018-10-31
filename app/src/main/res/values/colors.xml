@@ -6,4 +6,6 @@
     <color name="transparent">#00000000</color>
     <color name="titleColor">#414141</color>
     <color name="titleSelectedColor">#de2626</color>
+    <color name="newsTypeColor">#484848</color>
+    <color name="newsListBackground">#f1f1f1</color>
 </resources>

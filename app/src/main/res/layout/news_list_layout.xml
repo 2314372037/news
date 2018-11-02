@@ -2,15 +2,26 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:id="@+id/list_item_linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-<TextView
-    android:id="@+id/newsTitleTextView"
-    android:singleLine="false"
-    android:layout_margin="10dp"
-    android:textSize="20dp"
-    android:text="加载中..."
-    android:textColor="@color/titleColor"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/title"
+        android:textSize="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+    <TextView
+        android:id="@+id/replyCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

@@ -10,22 +10,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.zh231.neteasenews.R;
+import com.example.zh231.neteasenews.utils;
 
 public class homeListAdapter extends BaseAdapter {
 
     Context context;
-    String[] title;
-    String[] replyCount;
+    String[] title=new String[utils.nd.size()];
+    String[] replyCount=new String[utils.nd.size()];
 
-    public homeListAdapter(Context context, String[] title, String[] replyCount){
+    public homeListAdapter(Context context){
         this.context=context;
-        this.title=title;
-        this.replyCount=replyCount;
+        for (int i=0;i<utils.nd.size();i++){
+            this.title[i]=utils.nd.get(i).getTitle();
+            this.replyCount[i]=String.valueOf(utils.nd.get(i).getReplyCount());
+        }
     }
 
     @Override
     public int getCount() {
-        return title.length;
+        return utils.nd.size();
     }
 
     @Override

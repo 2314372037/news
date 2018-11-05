@@ -8,14 +8,9 @@
     <LinearLayout
         android:id="@+id/statusBar_layout"
         android:orientation="vertical"
-        android:background="@color/titleSelectedColor"
+        android:background="@color/mainColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout
-            android:id="@+id/statusBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </RelativeLayout>
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

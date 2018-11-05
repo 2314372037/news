@@ -32,6 +32,7 @@ import okhttp3.Response;
 public class utils {
 
     Context context;
+    static final String fileName="localJson.json";//本地json文件名
 
     public static normal_top0_Data ntd0;
     public static ArrayList<normalData> nd;
@@ -101,12 +102,9 @@ public class utils {
     public void parseJson(String json){
         if (nd==null){
             nd=new ArrayList<normalData>();
-        }else{
-            nd.clear();
         }
         ntd0=null;
-        ntd0=new normal_top0_Data();
-
+        ntd0=new normal_top0_Data();//置顶新闻，一个列表只有一条
 
         try{
             JSONObject jsonObject=new JSONObject(json);
@@ -129,29 +127,48 @@ public class utils {
                         continue;
                     }
                     normalData bdTemp=new normalData();//存储每一个json数组的数据
+                    if (T.has("votecount"))
                     bdTemp.setVotecount(T.getInt("votecount"));
+                    if (T.has("docid"))
                     bdTemp.setDocid(T.getString("docid"));
+                    if (T.has("lmodify"))
                     bdTemp.setLmodify(T.getString("lmodify"));
+                    if (T.has("url_3w"))
                     bdTemp.setUrl_3w(T.getString("url_3w"));
+                    if (T.has("source"))
                     bdTemp.setSource(T.getString("source"));
+                    if (T.has("postid"))
                     bdTemp.setPostid(T.getString("postid"));
+                    if (T.has("priority"))
                     bdTemp.setPriority(T.getInt("priority"));
+                    if (T.has("title"))
                     bdTemp.setTitle(T.getString("title"));
+                    if (T.has("mtime"))
                     bdTemp.setMtime(T.getString("mtime"));
+                    if (T.has("url"))
                     bdTemp.setUrl(T.getString("url"));
+                    if (T.has("replyCount"))
                     bdTemp.setReplyCount(T.getInt("replyCount"));
+                    if (T.has("ltitle"))
                     bdTemp.setLtitle(T.getString("ltitle"));
+                    if (T.has("subtitle"))
                     bdTemp.setSubtitle(T.getString("subtitle"));
+                    if (T.has("digest"))
                     bdTemp.setDigest(T.getString("digest"));
+                    if (T.has("boardid"))
                     bdTemp.setBoardid(T.getString("boardid"));
+                    if (T.has("imgsrc"))
                     bdTemp.setImgsrc(T.getString("imgsrc"));
+                    if (T.has("ptime"))
                     bdTemp.setPtime(T.getString("ptime"));
                     if (T.has("pixel"))
-                        bdTemp.setPixel(T.getString("pixel"));
+                    bdTemp.setPixel(T.getString("pixel"));
+                    if (T.has("daynum"))
                     bdTemp.setDaynum(T.getString("daynum"));
                     nd.add(bdTemp);
                 }
             }
+            new utils(context).saveFile(fileName,String.valueOf(json));//解析完成后保存json数据，下次打开加载
         }catch (Exception e){
             e.printStackTrace();
         }

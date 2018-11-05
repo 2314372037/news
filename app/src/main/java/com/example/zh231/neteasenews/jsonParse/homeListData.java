@@ -1,6 +1,6 @@
-package jsonParse;
+package com.example.zh231.neteasenews.jsonParse;
 
-public class normalData {
+public class homeListData {
 
     private int votecount;
 

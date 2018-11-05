@@ -1,10 +1,10 @@
-package jsonParse;
+package com.example.zh231.neteasenews.jsonParse;
 
 import android.content.SharedPreferences;
 
 import java.util.List;
 
-public class normal_top0_Data {
+public class homeListTopData {
     private String template;
 
     private String skipID;

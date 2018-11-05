@@ -5,26 +5,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 
-import jsonParse.normalData;
-import jsonParse.normal_top0_Data;
+import com.example.zh231.neteasenews.jsonParse.homeListData;
+
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -34,13 +27,9 @@ public class utils {
     Context context;
     static final String fileName="localJson.json";//本地json文件名
 
-    public static normal_top0_Data ntd0;
-    public static ArrayList<normalData> nd;
-
     public utils(Context context){
         this.context=context;
     }
-
 
     /**
      * 重置选择
@@ -99,34 +88,29 @@ public class utils {
      * 解析并把数据放到nd和ntd0静态变量
      * @param json 需要解析的json数据
      */
-    public void parseJson(String json){
-        if (nd==null){
-            nd=new ArrayList<normalData>();
-        }
-        ntd0=null;
-        ntd0=new normal_top0_Data();//置顶新闻，一个列表只有一条
-
+    public ArrayList<homeListData> parseJson(String json){
+        ArrayList<homeListData> nd=new ArrayList<>();
         try{
             JSONObject jsonObject=new JSONObject(json);
             JSONArray T1348647853363 = jsonObject.getJSONArray("T1348647853363");//T1348647853363新闻类型specialextra//特别的
             for (int i=0;i<T1348647853363.length();i++){//显示到页面和动态创建控件许需要再循环内完成
                 JSONObject T= T1348647853363.getJSONObject(i);
                 if (i==0){//0为通用参数，或者置顶参数（疑似）
-                    ntd0.setSource(T.getString("source"));
-                    ntd0.setTitle(T.getString("title"));
-                    ntd0.setHasImg(T.getInt("hasImg"));
-                    ntd0.setAlias(T.getString("alias"));
-                    ntd0.setVotecount(T.getInt("votecount"));
-                    ntd0.setReplyCount(T.getInt("replyCount"));
-                    ntd0.setHasIcon(T.getBoolean("hasIcon"));
-                    ntd0.setCid(T.getString("cid"));
-                    ntd0.setImgsrc(T.getString("imgsrc"));
+//                    ntd0.setSource(T.getString("source"));
+//                    ntd0.setTitle(T.getString("title"));
+//                    ntd0.setHasImg(T.getInt("hasImg"));
+//                    ntd0.setAlias(T.getString("alias"));
+//                    ntd0.setVotecount(T.getInt("votecount"));
+//                    ntd0.setReplyCount(T.getInt("replyCount"));
+//                    ntd0.setHasIcon(T.getBoolean("hasIcon"));
+//                    ntd0.setCid(T.getString("cid"));
+//                    ntd0.setImgsrc(T.getString("imgsrc"));
                 }else{
                     if (T.has("specialextra")){//不解析specialextra(疑似专题)
                         Log.d("parseJson","忽略解析专题数据");
                         continue;
                     }
-                    normalData bdTemp=new normalData();//存储每一个json数组的数据
+                    homeListData bdTemp=new homeListData();//存储每一个json数组的数据
                     if (T.has("votecount"))
                     bdTemp.setVotecount(T.getInt("votecount"));
                     if (T.has("docid"))
@@ -172,6 +156,7 @@ public class utils {
         }catch (Exception e){
             e.printStackTrace();
         }
+        return nd;
     }
 
 

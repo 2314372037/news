@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -39,6 +40,7 @@ public class fragment_home extends Fragment {
     static ListView listView;
     static fragment_home_adapter adapter;
     static ArrayList<homeListData> nd;
+    private homeHandle handle;
 
 
     static class homeHandle extends Handler{
@@ -86,7 +88,7 @@ public class fragment_home extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        final homeHandle handle = new homeHandle(this.getContext());
+        handle = new homeHandle(this.getContext());
 
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
 
@@ -104,7 +106,7 @@ public class fragment_home extends Fragment {
         String con=new utils(getContext()).readFile(utils.fileName);//读取本地文件
         if (con==null||con==""||con.isEmpty()){
             Log.d(TAG,"加载在线数据");
-            loadingData(0,handle);
+            loadingData(0);
         }else{
             Log.d(TAG,"加载本地数据");
             nd = new utils(getContext()).parseJson(con);
@@ -120,6 +122,7 @@ public class fragment_home extends Fragment {
 
             }
         });
+
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -130,7 +133,7 @@ public class fragment_home extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem+visibleItemCount==totalItemCount){
                     if (!isLoadingData){
-                        loadingData(1,handle);
+                        loadingData(1);
                     }
                 }
             }
@@ -139,8 +142,8 @@ public class fragment_home extends Fragment {
     }
 
 
-    private void loadingData(final int what,final homeHandle handler){
-
+    private void loadingData(final int what){
+        final homeHandle handler=handle;
         isLoadingData=true;
         Log.d(TAG,"数据加载中...");
         new Thread(new Runnable() {

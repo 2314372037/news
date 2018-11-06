@@ -1,6 +1,7 @@
 package com.example.zh231.neteasenews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -118,8 +119,11 @@ public class fragment_home extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Toast.makeText(getContext(),nd.get(position).getUrl(), Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getContext(),nd.get(position-1).getUrl(), Toast.LENGTH_SHORT).show();
+                Log.d("fragment_home===================",nd.get(position-1).getUrl());
+                Intent intent = new Intent(getContext(),newsContent.class);
+                intent.putExtra("url",nd.get(position-1).getUrl());
+                startActivity(intent);
             }
         });
 

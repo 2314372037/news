@@ -4,16 +4,22 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.util.Xml;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.example.zh231.neteasenews.jsonParse.homeListData;
 
@@ -80,7 +86,7 @@ public class utils {
         }catch (IOException io){
             io.printStackTrace();
         }
-        Log.d("response------",con);
+        //Log.d("response------",con);
         return con;
     }
 
@@ -157,6 +163,25 @@ public class utils {
             e.printStackTrace();
         }
         return nd;
+    }
+
+    /**
+     * 解析网页上的文章
+     * @param html
+     */
+    public String parseHtml(String html) throws Throwable{
+
+        String main="";
+        String pattern = "<main>[\\s\\S]*?</main>";
+//        InputStream is=new ByteArrayInputStream(html.getBytes());
+//        XmlPullParser xmlPullParser= Xml.newPullParser();
+//        xmlPullParser.setInput(is,"UTF-8");
+        Pattern p=Pattern.compile(pattern);
+        Matcher matcher=p.matcher(html);
+        if (matcher.find()){
+            main=matcher.group();
+        }
+        return main;
     }
 
 

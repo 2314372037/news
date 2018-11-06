@@ -14,20 +14,26 @@
         <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="46dp">
+            android:layout_height="wrap_content">
             <ImageView
                 android:src="@mipmap/skin1_news_search_view_logo"
                 android:layout_margin="8dp"
-                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_width="105px"
-                android:layout_height="51px" />
+                android:layout_height="72px" />
+            <Button
+                android:background="@drawable/edittext_layout"
+                android:layout_marginLeft="135px"
+                android:layout_marginRight="125px"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
             <ImageView
                 android:src="@mipmap/skin1_news_main_live_icon"
                 android:layout_margin="8dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_width="72px"
+                android:layout_width="105px"
                 android:layout_height="72px" />
 
         </RelativeLayout>

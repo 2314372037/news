@@ -33,7 +33,6 @@ public class fragment_home extends Fragment {
 
     private String[] newsType = {"头条","精选","娱乐","汽车","运动","平顶山","漫画","段子","北京","公开课"};
     private final String url_main="http://c.m.163.com/nc/article/headline/T1348647853363/";//T1348647853363为新闻类型(不是很清楚)
-    private final String url_video="http://c.m.163.com/recommend/getChanListNews?channel=T1457068979049&size=20";//视频
     private final String TAG = "fragment_home";
     static int home_data_start=0;//逐层，
     static int home_data_count=20;//一次性获取的新闻条数
@@ -62,14 +61,14 @@ public class fragment_home extends Fragment {
             switch (msg.what){
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
-                    nd = new utils(context).parseJson(String.valueOf(msg.obj));
+                    nd = new utils(context).parseJson_headline(String.valueOf(msg.obj));
                     adapter=new fragment_home_adapter(context,nd);
                     listView.setAdapter(adapter);
                     break;
                 case 1:
                     Log.d("下滑加载数据完成",String.valueOf(msg.obj));
                     //nd.clear();//发现不能对nd重新赋值(想着偷懒卡了几天t_t)
-                    ArrayList<homeListData> tempData=new utils(context).parseJson(String.valueOf(msg.obj));
+                    ArrayList<homeListData> tempData=new utils(context).parseJson_headline(String.valueOf(msg.obj));
                     for (int i=0;i<tempData.size();i++){//最多循环home_data_count次，不用做优化
                         nd.add(tempData.get(i));
                     }
@@ -110,7 +109,7 @@ public class fragment_home extends Fragment {
             loadingData(0);
         }else{
             Log.d(TAG,"加载本地数据");
-            nd = new utils(getContext()).parseJson(con);
+            nd = new utils(getContext()).parseJson_headline(con);
             adapter=new fragment_home_adapter(getContext(),nd);
             listView.setAdapter(adapter);
         }

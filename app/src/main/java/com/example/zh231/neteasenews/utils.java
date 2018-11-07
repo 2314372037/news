@@ -1,9 +1,11 @@
 package com.example.zh231.neteasenews;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.util.SparseArray;
 import android.util.Xml;
 import android.widget.TextView;
 
@@ -17,11 +19,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.example.zh231.neteasenews.jsonParse.homeListData;
+import com.example.zh231.neteasenews.jsonParse.videoListData;
+import com.example.zh231.neteasenews.jsonParse.videoTopic;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -94,7 +99,7 @@ public class utils {
      * 解析并把数据放到nd和ntd0静态变量
      * @param json 需要解析的json数据
      */
-    public ArrayList<homeListData> parseJson(String json){
+    public ArrayList<homeListData> parseJson_headline(String json){
         ArrayList<homeListData> nd=new ArrayList<>();
         try{
             JSONObject jsonObject=new JSONObject(json);
@@ -163,6 +168,56 @@ public class utils {
             e.printStackTrace();
         }
         return nd;
+    }
+
+
+    /**
+     * 解析视频数据
+     * @param json
+     * @return videoTopic未使用，sparseArray的1为videoListData
+     */
+    public SparseArray<ArrayList> parseJson_video(String json){
+//        ArrayList<videoTopic> vt=new ArrayList<>();
+        ArrayList<videoListData> vld=new ArrayList<>();
+        try{
+            JSONObject vldObj=new JSONObject(json);
+            JSONArray vldArr = vldObj.getJSONArray("视频");
+            for (int i=0;i<vldArr.length();i++){
+                videoListData videoListTemp=new videoListData();
+                JSONObject itemObj = vldArr.getJSONObject(i);
+                videoListTemp.setCategory(itemObj.getString("category"));
+                videoListTemp.setFirstFrameImg(itemObj.getString("firstFrameImg"));
+                videoListTemp.setFullSizeImg(itemObj.getString("fullSizeImg"));
+                videoListTemp.setLength(itemObj.getInt("length"));
+                if (itemObj.has("mp4Hd_url"))
+                videoListTemp.setMp4_url(itemObj.getString("mp4Hd_url"));//这里为高清
+                else if (itemObj.has("mp4_url"))
+                    videoListTemp.setMp4_url(itemObj.getString("mp4_url"));//没有高清选择标清
+                videoListTemp.setPlayCount(itemObj.getInt("playCount"));
+                videoListTemp.setPtime(itemObj.getString("ptime"));
+                videoListTemp.setReplyCount(itemObj.getInt("replyCount"));
+                videoListTemp.setReplyid(itemObj.getString("replyid"));
+                videoListTemp.setSectiontitle(itemObj.getString("sectiontitle"));
+                videoListTemp.setTitle(itemObj.getString("title"));
+                videoListTemp.setTopicDesc(itemObj.getString("topicDesc"));
+                videoListTemp.setTopicImg(itemObj.getString("topicImg"));
+                videoListTemp.setTopicName(itemObj.getString("topicName"));
+                videoListTemp.setTopicSid(itemObj.getString("topicSid"));
+                videoListTemp.setVid(itemObj.getString("vid"));
+                videoListTemp.setVideoRatio(itemObj.getDouble("videoRatio"));
+                videoListTemp.setVoteCount(itemObj.getInt("voteCount"));
+                videoListTemp.setVideosource(itemObj.getString("videosource"));
+                vld.add(videoListTemp);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        SparseArray<ArrayList> array=new SparseArray<>();
+//        array.put(0,vt);
+        array.put(1,vld);
+        return array;
     }
 
     /**

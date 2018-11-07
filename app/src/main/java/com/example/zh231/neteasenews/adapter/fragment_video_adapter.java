@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zh231.neteasenews.R;
 import com.example.zh231.neteasenews.jsonParse.videoListData;
+import com.example.zh231.neteasenews.utils;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class fragment_video_adapter<T> extends commonAdapter<T>{
 
         videoListData vld=(videoListData)data.get(position);
         videotitle.setText(vld.getTitle());
-        videoLength.setText(String.valueOf(vld.getLength()/60)+"分");
+        videoLength.setText(new utils(mContext).stringForTime(vld.getLength()));
         videoVoteCount.setText(String.valueOf(vld.getVoteCount()));
         videoReplyCount.setText(String.valueOf(vld.getReplyCount()));
         Glide.with(mContext).load(vld.getFirstFrameImg()).into(videoimage);

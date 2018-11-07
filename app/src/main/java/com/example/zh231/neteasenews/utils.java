@@ -1,32 +1,27 @@
 package com.example.zh231.neteasenews;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.SparseArray;
-import android.util.Xml;
 import android.widget.TextView;
+
+import com.example.zh231.neteasenews.jsonParse.homeListData;
+import com.example.zh231.neteasenews.jsonParse.videoListData;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.example.zh231.neteasenews.jsonParse.homeListData;
-import com.example.zh231.neteasenews.jsonParse.videoListData;
-import com.example.zh231.neteasenews.jsonParse.videoTopic;
 
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
@@ -276,6 +271,20 @@ public class utils {
             e.printStackTrace();
         }
         return content;
+    }
+
+    public String stringForTime(int timeMs){
+        int seconds = timeMs % 60;
+        int minutes = (timeMs/60)%60;
+        int hours = timeMs/3600;
+        StringBuilder mFormatBuilder=new StringBuilder();
+        Formatter mFormatter=new Formatter(mFormatBuilder, Locale.getDefault());
+        mFormatBuilder.setLength(0);
+        if(hours>0){
+            return mFormatter.format("%d:%02d:%02d",hours,minutes,seconds).toString();
+        } else {
+            return mFormatter.format("%02d:%02d",minutes,seconds).toString();
+        }
     }
 
 

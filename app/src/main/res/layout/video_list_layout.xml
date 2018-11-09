@@ -35,48 +35,11 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
     <LinearLayout
+        android:id="@+id/videoButtonLayout"
         android:layout_gravity="right"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="42dp">
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:src="@mipmap/zn"
-                android:layout_width="45px"
-                android:layout_height="45px" />
-            <TextView
-                android:id="@+id/videoVoteText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:src="@mipmap/zl"
-                android:layout_width="45px"
-                android:layout_height="45px" />
-            <TextView
-                android:id="@+id/videoReplyText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:src="@mipmap/zm"
-                android:layout_width="45px"
-                android:layout_height="45px" />
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

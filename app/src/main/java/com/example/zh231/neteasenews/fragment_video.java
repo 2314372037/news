@@ -1,6 +1,7 @@
 package com.example.zh231.neteasenews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -90,9 +91,11 @@ public class fragment_video extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (videoList!=null){
-                    Toast.makeText(getContext(),videoList.get(position).getMp4_url(),Toast.LENGTH_SHORT).show();
-
-
+//                    Toast.makeText(getContext(),videoList.get(position).getMp4_url(),Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent();
+                    intent.setClass(getContext(),videoPlay.class);
+                    intent.putExtra("url",videoList.get(position).getMp4_url());
+                    startActivity(intent);
                 }else{
                     Toast.makeText(getContext(),"数据加载中",Toast.LENGTH_SHORT).show();
                 }

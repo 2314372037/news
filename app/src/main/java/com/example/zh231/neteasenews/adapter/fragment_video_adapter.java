@@ -30,36 +30,21 @@ public class fragment_video_adapter<T> extends commonAdapter<T>{
 
         ViewHolder viewHolder= ViewHolder.get(mContext,convertView,parent, R.layout.video_list_layout,position);
 
-        LinearLayout videoBtnLayout = viewHolder.getView(R.id.videoButtonLayout);
-
-        imageButton ib_share=new imageButton(mContext);
-        imageButton ib_voteCount=new imageButton(mContext);
-        imageButton ib_replyCount=new imageButton(mContext);
-
         ImageView videoImage = viewHolder.getView(R.id.videoImage);
         TextView videoTitle = viewHolder.getView(R.id.videoText);
         TextView videoLength = viewHolder.getView(R.id.videoLength);
-
-//        TextView videoVoteCount = viewHolder.getView(R.id.videoVoteText);
-//        TextView videoReplyCount = viewHolder.getView(R.id.videoReplyText);
 
         videoListData vld=(videoListData)data.get(position);
 
         videoTitle.setText(vld.getTitle());
         videoLength.setText(new utils(mContext).stringForTime(vld.getLength()));
-
-
-        ib_share.setImage(R.mipmap.zm);
-        ib_voteCount.setText(String.valueOf(vld.getVoteCount()));
-        ib_replyCount.setText(String.valueOf(vld.getReplyCount()));
         Glide.with(mContext).load(vld.getFirstFrameImg()).into(videoImage);
 
-        videoBtnLayout.addView(ib_voteCount);
-        videoBtnLayout.addView(ib_replyCount);
-        videoBtnLayout.addView(ib_share);
+        imageButton ib_voteCount=viewHolder.getView(R.id.ib_voteCount);
+        imageButton ib_replyCount=viewHolder.getView(R.id.ib_replyCount);
 
-//        videoVoteCount.setText(String.valueOf(vld.getVoteCount()));
-//        videoReplyCount.setText(String.valueOf(vld.getReplyCount()));
+        ib_voteCount.setText(String.valueOf(vld.getVoteCount()));
+        ib_replyCount.setText(String.valueOf(vld.getReplyCount()));
 
         return viewHolder.getConvertView();
     }

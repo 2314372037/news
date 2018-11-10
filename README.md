@@ -4,12 +4,14 @@
 
 数据来自:https://blog.csdn.net/github_37360787/article/details/79529021
 
-2018/11/6
+[APK下载](screenshots/app-debug.apk)
 
-![image](https://github.com/2314372037/news/blob/master/screenshots/Screenshot_2018-11-06-17-54-28.png)
+2018/11/10
 
-![image](https://github.com/2314372037/news/blob/master/screenshots/Screenshot_2018-11-06-17-54-56.png)
+![image](/screenshots/Screenshot_2018-11-06-17-54-28.png)
 
-![image](https://github.com/2314372037/news/blob/master/screenshots/Screenshot_2018-11-10-16-51-33.png)
+![image](/screenshots/Screenshot_2018-11-06-17-54-56.png)
 
-![image](https://github.com/2314372037/news/blob/master/screenshots/Screenshot_2018-11-10-16-51-53.png)
+![image](/screenshots/Screenshot_2018-11-10-16-51-33.png)
+
+![image](/screenshots/Screenshot_2018-11-10-16-51-53.png)

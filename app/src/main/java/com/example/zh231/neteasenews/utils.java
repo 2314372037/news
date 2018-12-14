@@ -231,6 +231,10 @@ public class utils {
         if (matcher.find()){
             main=matcher.group();
         }
+        int s=main.indexOf("<div class=\"footer\">");//需要删除的节点开始处
+        int e=main.lastIndexOf("</div>");
+        String delStr=main.substring(s,e+6);//待删除的节点,6为"</div>"的长度，直接写死了(懒(oﾟvﾟ)ノ)
+        main=main.replace(delStr,"");
         return main;
     }
 

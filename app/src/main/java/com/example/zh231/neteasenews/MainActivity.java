@@ -1,5 +1,7 @@
 package com.example.zh231.neteasenews;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -31,8 +33,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         initActivity();
         setContentView(R.layout.activity_main);
+        test();
         initView();
         initViewData();
+    }
+
+
+
+    private void test (){
+        int arrayy[]={3,1,14,5,8,6,7,3,11,15};
+        for (int i=0;i<arrayy.length-1;i++){
+            for (int j=0;j<arrayy.length-1-i;j++){
+                if (arrayy[j]>arrayy[j+1]){
+                    int temp=arrayy[j];
+                    arrayy[j]=arrayy[j+1];
+                    arrayy[j+1]=temp;
+                }
+            }
+        }
+
     }
 
 

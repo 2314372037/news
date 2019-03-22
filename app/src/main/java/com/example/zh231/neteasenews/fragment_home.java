@@ -142,9 +142,8 @@ public class fragment_home extends Fragment {
                 if (firstVisibleItem+visibleItemCount==totalItemCount){
                     if (!isLoadingData){
                         //修改start and end，实现向后加载
-                        start=end+1; //接着最后一条新闻获取
-                        end=end+20; //例如： 第一次0-20，第二次21-40，第三次41-60
-                        loadingData(2);//按这个逻辑，无法正常获取数据，待解决
+                        start=start+end; //接着最后一条新闻获取 例如： 第一次0-20，第二次20-20，第三次40-20
+                        loadingData(2);
                     }
                 }
             }
@@ -171,7 +170,8 @@ public class fragment_home extends Fragment {
                         Log.d(TAG,"加载本地数据"+content);
                         break;
                     case 2://继续加载
-                        content = new utils(getContext()).readFile(filename);
+                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html");
+                        content=utils.fixJson(content);
                         Log.d(TAG,"继续加载数据"+content);
                         break;
                 }

@@ -116,9 +116,12 @@ public class utils {
     }
 
     //修复格式坏掉的json，返回正确的json
-    public String fixJson(String json){
-        json=json.replace("artiList(","");
-        return json.substring(0,json.length()-1);
+    public static String fixJson(String json){
+        if (json.contains("artiList(")){
+            json=json.replace("artiList(","");
+            json=json.substring(0,json.length()-1);
+        }
+        return json;
     }
 
     /**
@@ -127,7 +130,6 @@ public class utils {
      */
     public ArrayList<homeListData> parseJson_home(String json,String currentNewsType){
 
-        json=fixJson(json);
         JsonParser jsonParser=new JsonParser();
         JsonObject jsonObject=jsonParser.parse(json).getAsJsonObject();
         JsonArray jsonArray=jsonObject.getAsJsonArray(currentNewsType);

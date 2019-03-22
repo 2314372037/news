@@ -32,8 +32,6 @@ import java.util.Arrays;
 public class fragment_home extends Fragment {
 
 
-
-//    private final String url_main="http://c.m.163.com/nc/article/headline/T1348647853363/";//T1348647853363为新闻类型(不是很清楚)
     static String filename="data.json";
     static String currentNewsType = utils.newsTypeCode.BBM54PGAwangning.toString();
 

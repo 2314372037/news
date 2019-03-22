@@ -2,156 +2,149 @@ package com.example.zh231.neteasenews.jsonParse;
 
 public class homeListData {
 
-    private int votecount;
+
+//    	"liveInfo": null,
+//                "docid": "EAT2S0DF0514DL55",
+//                "source": "时间新闻",
+//                "title": "爆炸后的不眠夜 毛毯堵住窗户夫妻俩凑合了一宿",
+//                "priority": 150,
+//                "hasImg": 1,
+//                "url": "",
+//                "commentCount": 1720,
+//                "imgsrc3gtype": "1",
+//                "stitle": "S1553156722721@",
+//                "digest": "3月22日，江苏响水县化工厂爆炸事故已过去一天，据央视报道，",
+//                "imgsrc": "http://cms-bucket.ws.126.net/2019/03/22/edaa11f17a2c458fb67472209785a463.png",
+//                "ptime": "2019-03-22 18:17:29"
+
+
+    private Object liveInfo;
 
     private String docid;
 
-    private String lmodify;
-
-    private String url_3w;
-
     private String source;
-
-    private String postid;
+    
+    private String title;
 
     private int priority;
 
-    private String title;
-
-    private String mtime;
+    private int hasImg;
 
     private String url;
 
-    private int replyCount;
+    private int commentCount;
 
-    private String ltitle;
+    private String imgsrc3gtype;
 
-    private String subtitle;
+    private String stitle;
 
     private String digest;
-
-    private String boardid;
 
     private String imgsrc;
 
     private String ptime;
 
-    private String pixel;
 
-    private String daynum;
+    public void setliveInfo(Object liveInfo){
+        this.liveInfo = liveInfo;
+    }
+    public Object getliveInfo(){
+        return this.liveInfo;
+    }
 
-    public void setVotecount(int votecount){
-        this.votecount = votecount;
-    }
-    public int getVotecount(){
-        return this.votecount;
-    }
-    public void setDocid(String docid){
+
+    public void setdocid(String docid){
         this.docid = docid;
     }
-    public String getDocid(){
+    public String getdocid(){
         return this.docid;
     }
-    public void setLmodify(String lmodify){
-        this.lmodify = lmodify;
-    }
-    public String getLmodify(){
-        return this.lmodify;
-    }
-    public void setUrl_3w(String url_3w){
-        this.url_3w = url_3w;
-    }
-    public String getUrl_3w(){
-        return this.url_3w;
-    }
-    public void setSource(String source){
+
+
+    public void setsource(String source){
         this.source = source;
     }
-    public String getSource(){
+    public String getsource(){
         return this.source;
     }
-    public void setPostid(String postid){
-        this.postid = postid;
-    }
-    public String getPostid(){
-        return this.postid;
-    }
-    public void setPriority(int priority){
-        this.priority = priority;
-    }
-    public int getPriority(){
-        return this.priority;
-    }
-    public void setTitle(String title){
+
+
+    public void settitle(String title){
         this.title = title;
     }
-    public String getTitle(){
+    public String gettitle(){
         return this.title;
     }
-    public void setMtime(String mtime){
-        this.mtime = mtime;
+
+
+    public void setpriority(int priority){
+        this.priority = priority;
     }
-    public String getMtime(){
-        return this.mtime;
+    public int getpriority(){
+        return this.priority;
     }
-    public void setUrl(String url){
+
+
+    public void sethasImg(int hasImg){
+        this.hasImg = hasImg;
+    }
+    public int gethasImg(){
+        return this.hasImg;
+    }
+
+
+    public void seturl(String url){
         this.url = url;
     }
-    public String getUrl(){
+    public String geturl(){
         return this.url;
     }
-    public void setReplyCount(int replyCount){
-        this.replyCount = replyCount;
+
+
+    public void setcommentCount(int commentCount){
+        this.commentCount = commentCount;
     }
-    public int getReplyCount(){
-        return this.replyCount;
+    public int getcommentCount(){
+        return this.commentCount;
     }
-    public void setLtitle(String ltitle){
-        this.ltitle = ltitle;
+
+
+    public void setimgsrc3gtype(String imgsrc3gtype){
+        this.imgsrc3gtype = imgsrc3gtype;
     }
-    public String getLtitle(){
-        return this.ltitle;
+    public String getimgsrc3gtype(){
+        return this.imgsrc3gtype;
     }
-    public void setSubtitle(String subtitle){
-        this.subtitle = subtitle;
+
+
+    public void setstitle(String stitle){
+        this.stitle = stitle;
     }
-    public String getSubtitle(){
-        return this.subtitle;
+    public String getstitle(){
+        return this.stitle;
     }
-    public void setDigest(String digest){
+
+
+    public void setdigest(String digest){
         this.digest = digest;
     }
-    public String getDigest(){
+    public String getdigest(){
         return this.digest;
     }
-    public void setBoardid(String boardid){
-        this.boardid = boardid;
-    }
-    public String getBoardid(){
-        return this.boardid;
-    }
-    public void setImgsrc(String imgsrc){
+
+
+    public void setimgsrc(String imgsrc){
         this.imgsrc = imgsrc;
     }
-    public String getImgsrc(){
+    public String getimgsrc(){
         return this.imgsrc;
     }
-    public void setPtime(String ptime){
+
+
+    public void setptime(String ptime){
         this.ptime = ptime;
     }
-    public String getPtime(){
+    public String getptime(){
         return this.ptime;
-    }
-    public void setPixel(String pixel){
-        this.pixel = pixel;
-    }
-    public String getPixel(){
-        return this.pixel;
-    }
-    public void setDaynum(String daynum){
-        this.daynum = daynum;
-    }
-    public String getDaynum(){
-        return this.daynum;
     }
 }

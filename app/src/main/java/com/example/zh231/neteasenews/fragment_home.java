@@ -45,7 +45,6 @@ public class fragment_home extends Fragment {
     LinearLayout homeTopView=null;
     static ListView listView;
     static fragment_home_adapter adapter;
-    static ArrayList<homeListData> nd;
     private homeHandle handle;
 
 
@@ -68,8 +67,8 @@ public class fragment_home extends Fragment {
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
                     new utils(context).saveFile("filename",String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                    new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
-//                    adapter=new fragment_home_adapter<homeListData>(context,nd);W
+                    ArrayList<homeListData> hdl = new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                    adapter=new fragment_home_adapter<homeListData>(context,hdl);
                     listView.setAdapter(adapter);
                     break;
                 case 1:

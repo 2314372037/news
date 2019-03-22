@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import com.example.zh231.neteasenews.jsonParse.homeListData;
 import com.example.zh231.neteasenews.jsonParse.videoListData;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -113,18 +114,48 @@ public class utils {
         return con;
     }
 
+    //修复格式坏掉的json，返回正确的json
+    public String fixJson(String json){
+        json=json.replace("artiList(","");
+        return json.substring(0,json.length()-1);
+    }
+
     /**
      * 解析并把数据放到nd和ntd0静态变量
      * @param json 需要解析的json数据
      */
-    public ArrayList<homeListData> parseJson_home(String json){
+    public ArrayList<homeListData> parseJson_home(String json,String currentNewsType){
+
+        json=fixJson(json);
+        JsonParser jsonParser=new JsonParser();
+        JsonObject jsonObject=jsonParser.parse(json).getAsJsonObject();
+        JsonArray jsonArray=jsonObject.getAsJsonArray(currentNewsType);
+
+
+        for (int i=0;i<jsonArray.size();i++){
+            JsonElement element=jsonArray.get(i);
+            JsonObject ObjectItem=element.getAsJsonObject();//每项数组对象
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
         ArrayList<homeListData> nd=new ArrayList<>();
-        try{
-            JSONObject jsonObject=new JSONObject(json);
-            JSONArray T1348647853363 = jsonObject.getJSONArray("T1348647853363");//T1348647853363新闻类型specialextra//特别的
-            for (int i=0;i<T1348647853363.length();i++){//显示到页面和动态创建控件许需要再循环内完成
-                JSONObject T= T1348647853363.getJSONObject(i);
-                if (i==0){//0为通用参数，或者置顶参数（疑似）
+//        try{
+//            JSONObject jsonObject=new JSONObject(json);
+//            JSONArray T1348647853363 = jsonObject.getJSONArray("T1348647853363");//T1348647853363新闻类型specialextra//特别的
+//            for (int i=0;i<T1348647853363.length();i++){//显示到页面和动态创建控件许需要再循环内完成
+//                JSONObject T= T1348647853363.getJSONObject(i);
+//               if (i==0){//0为通用参数，或者置顶参数（疑似）
 //                    ntd0.setSource(T.getString("source"));
 //                    ntd0.setTitle(T.getString("title"));
 //                    ntd0.setHasImg(T.getInt("hasImg"));
@@ -134,57 +165,57 @@ public class utils {
 //                    ntd0.setHasIcon(T.getBoolean("hasIcon"));
 //                    ntd0.setCid(T.getString("cid"));
 //                    ntd0.setImgsrc(T.getString("imgsrc"));
-                }else{
-                    if (T.has("specialextra")){//不解析specialextra(疑似专题)
-                        Log.d("parseJson","忽略解析专题数据");
-                        continue;
-                    }
-                    homeListData bdTemp=new homeListData();//存储每一个json数组的数据
-                    if (T.has("votecount"))
-                    bdTemp.setVotecount(T.getInt("votecount"));
-                    if (T.has("docid"))
-                    bdTemp.setDocid(T.getString("docid"));
-                    if (T.has("lmodify"))
-                    bdTemp.setLmodify(T.getString("lmodify"));
-                    if (T.has("url_3w"))
-                    bdTemp.setUrl_3w(T.getString("url_3w"));
-                    if (T.has("source"))
-                    bdTemp.setSource(T.getString("source"));
-                    if (T.has("postid"))
-                    bdTemp.setPostid(T.getString("postid"));
-                    if (T.has("priority"))
-                    bdTemp.setPriority(T.getInt("priority"));
-                    if (T.has("title"))
-                    bdTemp.setTitle(T.getString("title"));
-                    if (T.has("mtime"))
-                    bdTemp.setMtime(T.getString("mtime"));
-                    if (T.has("url"))
-                    bdTemp.setUrl(T.getString("url"));
-                    if (T.has("replyCount"))
-                    bdTemp.setReplyCount(T.getInt("replyCount"));
-                    if (T.has("ltitle"))
-                    bdTemp.setLtitle(T.getString("ltitle"));
-                    if (T.has("subtitle"))
-                    bdTemp.setSubtitle(T.getString("subtitle"));
-                    if (T.has("digest"))
-                    bdTemp.setDigest(T.getString("digest"));
-                    if (T.has("boardid"))
-                    bdTemp.setBoardid(T.getString("boardid"));
-                    if (T.has("imgsrc"))
-                    bdTemp.setImgsrc(T.getString("imgsrc"));
-                    if (T.has("ptime"))
-                    bdTemp.setPtime(T.getString("ptime"));
-                    if (T.has("pixel"))
-                    bdTemp.setPixel(T.getString("pixel"));
-                    if (T.has("daynum"))
-                    bdTemp.setDaynum(T.getString("daynum"));
-                    nd.add(bdTemp);
-                }
-            }
-            new utils(context).saveFile(fileName,String.valueOf(json));//解析完成后保存json数据，下次打开加载
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//                }else{
+//                    if (T.has("specialextra")){//不解析specialextra(疑似专题)
+//                        Log.d("parseJson","忽略解析专题数据");
+//                        continue;
+//                    }
+//                    homeListData bdTemp=new homeListData();//存储每一个json数组的数据
+//                    if (T.has("votecount"))
+//                    bdTemp.setVotecount(T.getInt("votecount"));
+//                    if (T.has("docid"))
+//                    bdTemp.setDocid(T.getString("docid"));
+//                    if (T.has("lmodify"))
+//                    bdTemp.setLmodify(T.getString("lmodify"));
+//                    if (T.has("url_3w"))
+//                    bdTemp.setUrl_3w(T.getString("url_3w"));
+//                    if (T.has("source"))
+//                    bdTemp.setSource(T.getString("source"));
+//                    if (T.has("postid"))
+//                    bdTemp.setPostid(T.getString("postid"));
+//                    if (T.has("priority"))
+//                    bdTemp.setPriority(T.getInt("priority"));
+//                    if (T.has("title"))
+//                    bdTemp.setTitle(T.getString("title"));
+//                    if (T.has("mtime"))
+//                    bdTemp.setMtime(T.getString("mtime"));
+//                    if (T.has("url"))
+//                    bdTemp.setUrl(T.getString("url"));
+//                    if (T.has("replyCount"))
+//                    bdTemp.setReplyCount(T.getInt("replyCount"));
+//                    if (T.has("ltitle"))
+//                    bdTemp.setLtitle(T.getString("ltitle"));
+//                    if (T.has("subtitle"))
+//                    bdTemp.setSubtitle(T.getString("subtitle"));
+//                    if (T.has("digest"))
+//                    bdTemp.setDigest(T.getString("digest"));
+//                    if (T.has("boardid"))
+//                    bdTemp.setBoardid(T.getString("boardid"));
+//                    if (T.has("imgsrc"))
+//                    bdTemp.setImgsrc(T.getString("imgsrc"));
+//                    if (T.has("ptime"))
+//                    bdTemp.setPtime(T.getString("ptime"));
+//                    if (T.has("pixel"))
+//                    bdTemp.setPixel(T.getString("pixel"));
+//                    if (T.has("daynum"))
+//                    bdTemp.setDaynum(T.getString("daynum"));
+//                    nd.add(bdTemp);
+//                }
+//            }
+//            new utils(context).saveFile(fileName,String.valueOf(json));//解析完成后保存json数据，下次打开加载
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
         return nd;
     }
 
@@ -195,46 +226,47 @@ public class utils {
      * @return videoTopic未使用，sparseArray的1为videoListData
      */
     public SparseArray<ArrayList> parseJson_video(String json){
+
 //        ArrayList<videoTopic> vt=new ArrayList<>();
         ArrayList<videoListData> vld=new ArrayList<>();
-        try{
-            JSONObject vldObj=new JSONObject(json);
-            JSONArray vldArr = vldObj.getJSONArray("视频");
-            for (int i=0;i<vldArr.length();i++){
-                videoListData videoListTemp=new videoListData();
-                JSONObject itemObj = vldArr.getJSONObject(i);
-                videoListTemp.setCategory(itemObj.getString("category"));
-                videoListTemp.setFirstFrameImg(itemObj.getString("firstFrameImg"));
-                videoListTemp.setFullSizeImg(itemObj.getString("fullSizeImg"));
-                videoListTemp.setLength(itemObj.getInt("length"));
-                if (itemObj.has("mp4Hd_url"))
-                videoListTemp.setMp4_url(itemObj.getString("mp4Hd_url"));//这里为高清
-                else if (itemObj.has("mp4_url"))
-                    videoListTemp.setMp4_url(itemObj.getString("mp4_url"));//没有高清选择标清
-                videoListTemp.setPlayCount(itemObj.getInt("playCount"));
-                videoListTemp.setPtime(itemObj.getString("ptime"));
-                videoListTemp.setReplyCount(itemObj.getInt("replyCount"));
-                videoListTemp.setReplyid(itemObj.getString("replyid"));
-                videoListTemp.setSectiontitle(itemObj.getString("sectiontitle"));
-                videoListTemp.setTitle(itemObj.getString("title"));
-                videoListTemp.setTopicDesc(itemObj.getString("topicDesc"));
-                videoListTemp.setTopicImg(itemObj.getString("topicImg"));
-                videoListTemp.setTopicName(itemObj.getString("topicName"));
-                videoListTemp.setTopicSid(itemObj.getString("topicSid"));
-                videoListTemp.setVid(itemObj.getString("vid"));
-                videoListTemp.setVideoRatio(itemObj.getDouble("videoRatio"));
-                videoListTemp.setVoteCount(itemObj.getInt("voteCount"));
-                videoListTemp.setVideosource(itemObj.getString("videosource"));
-                vld.add(videoListTemp);
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+//        try{
+//            JSONObject vldObj=new JSONObject(json);
+//            JSONArray vldArr = vldObj.getJSONArray("视频");
+//            for (int i=0;i<vldArr.length();i++){
+//                videoListData videoListTemp=new videoListData();
+//                JSONObject itemObj = vldArr.getJSONObject(i);
+//                videoListTemp.setCategory(itemObj.getString("category"));
+//                videoListTemp.setFirstFrameImg(itemObj.getString("firstFrameImg"));
+//                videoListTemp.setFullSizeImg(itemObj.getString("fullSizeImg"));
+//                videoListTemp.setLength(itemObj.getInt("length"));
+//                if (itemObj.has("mp4Hd_url"))
+//                videoListTemp.setMp4_url(itemObj.getString("mp4Hd_url"));//这里为高清
+//                else if (itemObj.has("mp4_url"))
+//                    videoListTemp.setMp4_url(itemObj.getString("mp4_url"));//没有高清选择标清
+//                videoListTemp.setPlayCount(itemObj.getInt("playCount"));
+//                videoListTemp.setPtime(itemObj.getString("ptime"));
+//                videoListTemp.setReplyCount(itemObj.getInt("replyCount"));
+//                videoListTemp.setReplyid(itemObj.getString("replyid"));
+//                videoListTemp.setSectiontitle(itemObj.getString("sectiontitle"));
+//                videoListTemp.setTitle(itemObj.getString("title"));
+//                videoListTemp.setTopicDesc(itemObj.getString("topicDesc"));
+//                videoListTemp.setTopicImg(itemObj.getString("topicImg"));
+//                videoListTemp.setTopicName(itemObj.getString("topicName"));
+//                videoListTemp.setTopicSid(itemObj.getString("topicSid"));
+//                videoListTemp.setVid(itemObj.getString("vid"));
+//                videoListTemp.setVideoRatio(itemObj.getDouble("videoRatio"));
+//                videoListTemp.setVoteCount(itemObj.getInt("voteCount"));
+//                videoListTemp.setVideosource(itemObj.getString("videosource"));
+//                vld.add(videoListTemp);
+//            }
+//
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//
         SparseArray<ArrayList> array=new SparseArray<>();
-//        array.put(0,vt);
-        array.put(1,vld);
+////        array.put(0,vt);
+//        array.put(1,vld);
         return array;
     }
 

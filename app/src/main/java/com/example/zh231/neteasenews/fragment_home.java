@@ -31,12 +31,13 @@ import java.util.Arrays;
 
 public class fragment_home extends Fragment {
 
-    private String[] newsType = {"头条","精选","娱乐","汽车","运动","平顶山","漫画","段子","北京","公开课"};
-
 
 
 //    private final String url_main="http://c.m.163.com/nc/article/headline/T1348647853363/";//T1348647853363为新闻类型(不是很清楚)
     private String filename="data.json";
+    static String currentNewsType = utils.newsTypeCode.BBM54PGAwangning.toString();
+
+
     private final String TAG = "fragment_home";
     static int start=0;//逐层，
     static int end=20;//一次性获取的新闻条数
@@ -67,8 +68,8 @@ public class fragment_home extends Fragment {
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
                     new utils(context).saveFile("filename",String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-
-//                    adapter=new fragment_home_adapter<homeListData>(context,nd);
+                    new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+//                    adapter=new fragment_home_adapter<homeListData>(context,nd);W
                     listView.setAdapter(adapter);
                     break;
                 case 1:
@@ -150,7 +151,7 @@ public class fragment_home extends Fragment {
                 String content="";
                 switch (what){
                     case 0://在线加载
-                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+utils.newsTypeCode.BBM54PGAwangning+"/"+start+"-"+end+".html");
+                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html");
                         Log.d(TAG,"加载在线数据"+content);
                         break;
                     case 1://本地加载

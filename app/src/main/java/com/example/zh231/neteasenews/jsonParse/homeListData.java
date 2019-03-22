@@ -23,7 +23,7 @@ public class homeListData {
     private String docid;
 
     private String source;
-    
+
     private String title;
 
     private int priority;

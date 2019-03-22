@@ -116,10 +116,10 @@ public class fragment_home extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),nd.get(position-1).getUrl(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getContext(),newsContent.class);
-                intent.putExtra("url",nd.get(position-1).getUrl());
-                startActivity(intent);
+//                Toast.makeText(getContext(),nd.get(position-1).getUrl(), Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(getContext(),newsContent.class);
+//                intent.putExtra("url",nd.get(position-1).getUrl());
+//                startActivity(intent);
             }
         });
 

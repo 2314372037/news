@@ -22,18 +22,18 @@ public class fragment_home_adapter<T> extends commonAdapter<T> {
 
         ViewHolder viewHolder=ViewHolder.get(mContext,convertView,parent, R.layout.news_list_layout,position);
 
-        ImageView image=viewHolder.getView(R.id.image);
-        TextView title = viewHolder.getView(R.id.title);
-        TextView source = viewHolder.getView(R.id.source);
-        TextView replyCount = viewHolder.getView(R.id.replyCount);
-
-        String replyText =((homeListData) data.get(position)).getReplyCount()+"跟帖";
-        title.setText(((homeListData)data.get(position)).getTitle());
-        source.setText(((homeListData) data.get(position)).getSource());
-        replyCount.setText(replyText);
-        Glide.with(mContext)
-                .load(((homeListData)data.get(position)).getImgsrc())
-                .into(image);
+//        ImageView image=viewHolder.getView(R.id.image);
+//        TextView title = viewHolder.getView(R.id.title);
+//        TextView source = viewHolder.getView(R.id.source);
+//        TextView replyCount = viewHolder.getView(R.id.replyCount);
+//
+//        String replyText =((homeListData) data.get(position)).getReplyCount()+"跟帖";
+//        title.setText(((homeListData)data.get(position)).getTitle());
+//        source.setText(((homeListData) data.get(position)).getSource());
+//        replyCount.setText(replyText);
+//        Glide.with(mContext)
+//                .load(((homeListData)data.get(position)).getImgsrc())
+//                .into(image);
 
         return viewHolder.getConvertView();
     }

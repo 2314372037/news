@@ -28,10 +28,33 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+
 public class utils {
 
-    Context context;
+    Context context;//注意使用弱引用
     static final String fileName="localJson.json";//本地json文件名
+
+    static final String hostUrl163="https://3g.163.com";
+
+    static final String UrlBody="/touch/reconstruct/article/list/";
+
+    static final String videoUrl="/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList";
+
+    public enum newsTypeCode{
+        BBM54PGAwangning,//新闻
+        BA10TA81wangning,//娱乐
+        BA8E6OEOwangning,//体育
+        BA8EE5GMwangning,//财经
+        BAI67OGGwangning,//军事
+        BA8D4A3Rwangning,//科技
+        BAI6I0O5wangning,//手机
+        BAI6JOD9wangning,//数码
+        BA8F6ICNwangning,//时尚
+        BAI6RHDKwangning,//游戏
+        BA8FF5PRwangning,//教育
+        BDC4QSV3wangning,//健康
+        BEO4GINLwangning,//旅游
+    }
 
     public utils(Context context){
         this.context=context;
@@ -72,7 +95,7 @@ public class utils {
         return result;
     }
 
-    public String sendGet(String url){//http://c.m.163.com/nc/article/headline/T1348647853363/0-40.html
+    static String sendGet(String url){
         Log.d("url-------------",url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
@@ -94,7 +117,7 @@ public class utils {
      * 解析并把数据放到nd和ntd0静态变量
      * @param json 需要解析的json数据
      */
-    public ArrayList<homeListData> parseJson_headline(String json){
+    public ArrayList<homeListData> parseJson_home(String json){
         ArrayList<homeListData> nd=new ArrayList<>();
         try{
             JSONObject jsonObject=new JSONObject(json);

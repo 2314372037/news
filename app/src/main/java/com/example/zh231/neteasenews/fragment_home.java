@@ -32,11 +32,16 @@ import java.util.Arrays;
 public class fragment_home extends Fragment {
 
     private String[] newsType = {"头条","精选","娱乐","汽车","运动","平顶山","漫画","段子","北京","公开课"};
-    private final String url_main="http://c.m.163.com/nc/article/headline/T1348647853363/";//T1348647853363为新闻类型(不是很清楚)
+
+
+
+//    private final String url_main="http://c.m.163.com/nc/article/headline/T1348647853363/";//T1348647853363为新闻类型(不是很清楚)
+    private String filename="data.json";
     private final String TAG = "fragment_home";
-    static int home_data_start=0;//逐层，
-    static int home_data_count=20;//一次性获取的新闻条数
+    static int start=0;//逐层，
+    static int end=20;//一次性获取的新闻条数
     static boolean isLoadingData=false;//是否在加载数据
+    LinearLayout homeTopView=null;
     static ListView listView;
     static fragment_home_adapter adapter;
     static ArrayList<homeListData> nd;
@@ -61,104 +66,101 @@ public class fragment_home extends Fragment {
             switch (msg.what){
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
-                    nd = new utils(context).parseJson_headline(String.valueOf(msg.obj));
-                    adapter=new fragment_home_adapter(context,nd);
+                    new utils(context).saveFile("filename",String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
+
+//                    adapter=new fragment_home_adapter<homeListData>(context,nd);
                     listView.setAdapter(adapter);
                     break;
                 case 1:
-                    Log.d("下滑加载数据完成",String.valueOf(msg.obj));
-                    //nd.clear();//发现不能对nd重新赋值(想着偷懒卡了几天t_t)
-                    ArrayList<homeListData> tempData=new utils(context).parseJson_headline(String.valueOf(msg.obj));
-                    for (int i=0;i<tempData.size();i++){//最多循环home_data_count次，不用做优化
-                        nd.add(tempData.get(i));
-                    }
-                    adapter.notifyDataSetChanged();
+                    Log.d("加载本地数据完成",String.valueOf(msg.obj));
+
                     break;
             }
             isLoadingData=false;
         }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-
-        handle = new homeHandle(this.getContext());
-
-        View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
-
-        LinearLayout homeTopView=view.findViewById(R.id.homeTopView);
-        for (int i=0;i<newsType.length;i++){
-            TextView textView=new TextView(getContext());
-            textView.setTextSize(16);
-            textView.setText("\t\t\t"+newsType[i]);
-            textView.setTextColor(Color.BLACK);
-            homeTopView.addView(textView);
-        }
-
-        listView = view.findViewById(R.id.newsListView);
-
-        String con=new utils(getContext()).readFile(utils.fileName);//读取本地文件
+    /**
+     * 初始化相关
+     */
+    public void initData(){
+        String con=new utils(getContext()).readFile(utils.fileName);//尝试读取本地文件
         if (con==null||con==""||con.isEmpty()){
             Log.d(TAG,"加载在线数据");
             loadingData(0);
         }else{
             Log.d(TAG,"加载本地数据");
-            nd = new utils(getContext()).parseJson_headline(con);
-            adapter=new fragment_home_adapter(getContext(),nd);
-            listView.setAdapter(adapter);
+            loadingData(1);
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        handle = new homeHandle(this.getContext());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
+
+        homeTopView = view.findViewById(R.id.homeTopView);//重构
+
+        listView = view.findViewById(R.id.newsListView);
+
+        initData();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Toast.makeText(getContext(),nd.get(position-1).getUrl(), Toast.LENGTH_SHORT).show();
-                Log.d("fragment_home===================",nd.get(position-1).getUrl());
                 Intent intent = new Intent(getContext(),newsContent.class);
                 intent.putExtra("url",nd.get(position-1).getUrl());
                 startActivity(intent);
             }
         });
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {//滚动到底部自动加载
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem+visibleItemCount==totalItemCount){
                     if (!isLoadingData){
-                        loadingData(1);
+                        //修改start and end，实现向后加载
+
+                        loadingData(0);
                     }
                 }
             }
         });
-        return view;
+        return view; //返回给调用者
     }
 
 
     private void loadingData(final int what){
         final homeHandle handler=handle;
         isLoadingData=true;
-        Log.d(TAG,"数据加载中...");
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String con = new utils(getContext()).sendGet(url_main+home_data_start+"-"+home_data_count+".html");
-                home_data_start++;
-                Log.d("fragment_home","--home_data_start:"+home_data_start);
-                //home_data_start滑到列表最后一条+1，用于加载新数据
+                String content="";
+                switch (what){
+                    case 0://在线加载
+                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+utils.newsTypeCode.BBM54PGAwangning+"/"+start+"-"+end+".html");
+                        Log.d(TAG,"加载在线数据"+content);
+                        break;
+                    case 1://本地加载
+                        content = new utils(getContext()).readFile("filename");
+                        Log.d(TAG,"加载本地数据"+content);
+                        break;
+                }
                 Message message=new Message();
                 message.what=what;
-                message.obj=String.valueOf(con);
+                message.obj=String.valueOf(content);
                 handler.sendMessage(message);
             }
         }).start();

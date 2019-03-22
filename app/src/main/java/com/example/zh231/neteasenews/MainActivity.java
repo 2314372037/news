@@ -1,15 +1,10 @@
 package com.example.zh231.neteasenews;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -33,27 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         initActivity();
         setContentView(R.layout.activity_main);
-        test();
         initView();
         initViewData();
     }
-
-
-
-    private void test (){
-        int arrayy[]={3,1,14,5,8,6,7,3,11,15};
-        for (int i=0;i<arrayy.length-1;i++){
-            for (int j=0;j<arrayy.length-1-i;j++){
-                if (arrayy[j]>arrayy[j+1]){
-                    int temp=arrayy[j];
-                    arrayy[j]=arrayy[j+1];
-                    arrayy[j+1]=temp;
-                }
-            }
-        }
-
-    }
-
 
     /**
      * 初始化
@@ -86,18 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_jj.setOnClickListener(this);
         tv_me.setOnClickListener(this);
 
-        if (tv_home!=null){//默认选择
-            tv_home.setSelected(true);
-            fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            if (fh == null) {
-                fh = new fragment_home();//初始化fragment
-                fragmentTransaction.add(R.id.fragment_frameLayout, fh);
-            } else {
-                fragmentTransaction.show(fh);
-            }
-            fragmentTransaction.commit();
-        }
-        //设置drawableTop大小
+        //设置底部按钮大小及相对位置
         int drawable_width=72;
         int drawable_height=72;
         Drawable drawable_home = getDrawable(R.drawable.tab_menu_home_image);
@@ -115,17 +81,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Drawable drawable_me = getDrawable(R.drawable.tab_menu_me_image);
         drawable_me.setBounds(0,0,drawable_width,drawable_height);
         tv_me.setCompoundDrawables(null,drawable_me,null,null);
+
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+        tv_home.setSelected(true);
+        if (fh == null) {
+            fh = new fragment_home();//初始化fragment_home
+            fragmentTransaction.add(R.id.fragment_frameLayout, fh);
+        } else {
+            fragmentTransaction.show(fh);
+        }
+
+        fragmentTransaction.commit();
     }
 
     @Override
     public void onClick(View v) {
 
-        fragmentTransaction=getSupportFragmentManager().beginTransaction();
+        fragmentTransaction=getSupportFragmentManager().beginTransaction();//一个FragmentTransaction只能commit一次
 
-        new utils(this).hideFragment(fh,fragmentTransaction);//隐藏全部Fragment
-        new utils(this).hideFragment(fv,fragmentTransaction);//隐藏全部Fragment
-        new utils(this).hideFragment(fj,fragmentTransaction);//隐藏全部Fragment
-        new utils(this).hideFragment(fm,fragmentTransaction);//隐藏全部Fragment
+        new utils(this).hideFragment(fh,fragmentTransaction);//隐藏一个Fragment
+        new utils(this).hideFragment(fv,fragmentTransaction);
+        new utils(this).hideFragment(fj,fragmentTransaction);
+        new utils(this).hideFragment(fm,fragmentTransaction);
 
         switch (v.getId()){
             case R.id.text_home:
@@ -138,19 +116,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     fragmentTransaction.show(fh);
                 }
+
                 break;
+
+
             case R.id.text_video:
                 new utils(this).resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
                 tv_video.setSelected(true);
 
-                if (fv==null){//-1为空
+                if (fv==null){
                     fv=new fragment_video();
                     fragmentTransaction.add(R.id.fragment_frameLayout,fv);
                 }else{
                     fragmentTransaction.show(fv);
                 }
-
                 break;
+
+
             case R.id.text_jj:
                 new utils(this).resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
                 tv_jj.setSelected(true);
@@ -163,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 break;
+
+
             case R.id.text_me:
                 new utils(this).resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
                 tv_me.setSelected(true);
@@ -173,8 +157,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     fragmentTransaction.show(fm);
                 }
-
                 break;
+
+
         }
         fragmentTransaction.commit();
     }

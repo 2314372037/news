@@ -34,18 +34,22 @@ public class fragment_home extends Fragment {
 
 
 //    private final String url_main="http://c.m.163.com/nc/article/headline/T1348647853363/";//T1348647853363为新闻类型(不是很清楚)
-    private String filename="data.json";
+    static String filename="data.json";
     static String currentNewsType = utils.newsTypeCode.BBM54PGAwangning.toString();
 
 
     private final String TAG = "fragment_home";
+
     static int start=0;//逐层，
-    static int end=20;//一次性获取的新闻条数
+    static int end=20;//一次性获取的新闻条数 推荐20
+
+
     static boolean isLoadingData=false;//是否在加载数据
     LinearLayout homeTopView=null;
     static ListView listView;
     static fragment_home_adapter adapter;
     private homeHandle handle;
+    static ArrayList<homeListData> hdl=null;
 
 
     static class homeHandle extends Handler{
@@ -66,14 +70,23 @@ public class fragment_home extends Fragment {
             switch (msg.what){
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
-                    new utils(context).saveFile("filename",String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                    ArrayList<homeListData> hdl = new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                    new utils(context).saveFile(filename,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
+                    hdl = new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
                     adapter=new fragment_home_adapter<homeListData>(context,hdl);
                     listView.setAdapter(adapter);
                     break;
                 case 1:
                     Log.d("加载本地数据完成",String.valueOf(msg.obj));
-
+                    hdl = new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                    adapter=new fragment_home_adapter<homeListData>(context,hdl);
+                    listView.setAdapter(adapter);
+                    break;
+                case 2:
+                    Log.d("继续加载数据完成",String.valueOf(msg.obj));
+                    new utils(context).saveFile(filename,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
+                    ArrayList<homeListData> tempList= new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                    hdl.addAll(tempList);
+                    adapter.notifyDataSetChanged();
                     break;
             }
             isLoadingData=false;
@@ -115,10 +128,10 @@ public class fragment_home extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getContext(),nd.get(position-1).getUrl(), Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getContext(),newsContent.class);
-//                intent.putExtra("url",nd.get(position-1).getUrl());
-//                startActivity(intent);
+                Toast.makeText(getContext(),"url:"+hdl.get(position-1).geturl(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(),newsContent.class);
+                intent.putExtra("url",hdl.get(position-1).geturl());
+                startActivity(intent);
             }
         });
 
@@ -131,8 +144,9 @@ public class fragment_home extends Fragment {
                 if (firstVisibleItem+visibleItemCount==totalItemCount){
                     if (!isLoadingData){
                         //修改start and end，实现向后加载
-
-                        loadingData(0);
+                        start=end+1; //接着最后一条新闻获取
+                        end=end+20; //例如： 第一次0-20，第二次21-40，第三次41-60
+                        loadingData(2);//按这个逻辑，无法正常获取数据，待解决
                     }
                 }
             }
@@ -151,11 +165,16 @@ public class fragment_home extends Fragment {
                 switch (what){
                     case 0://在线加载
                         content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html");
+                        content=utils.fixJson(content);
                         Log.d(TAG,"加载在线数据"+content);
                         break;
                     case 1://本地加载
-                        content = new utils(getContext()).readFile("filename");
+                        content = new utils(getContext()).readFile(filename);
                         Log.d(TAG,"加载本地数据"+content);
+                        break;
+                    case 2://继续加载
+                        content = new utils(getContext()).readFile(filename);
+                        Log.d(TAG,"继续加载数据"+content);
                         break;
                 }
                 Message message=new Message();

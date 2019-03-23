@@ -11,12 +11,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView tv_home;
     private TextView tv_video;
-    private TextView tv_jj;
     private TextView tv_me;
 
     private fragment_home fh;
     private fragment_video fv;
-    private fragment_jj fj;
     private fragment_me fm;
 
     private String TAG="MainActivity";
@@ -49,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView(){
         tv_home=(TextView)findViewById(R.id.text_home);
         tv_video=(TextView)findViewById(R.id.text_video);
-        tv_jj=(TextView)findViewById(R.id.text_jj);
         tv_me=(TextView)findViewById(R.id.text_me);
     }
 
@@ -60,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tv_home.setOnClickListener(this);
         tv_video.setOnClickListener(this);
-        tv_jj.setOnClickListener(this);
         tv_me.setOnClickListener(this);
 
         //设置底部按钮大小及相对位置
@@ -73,10 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Drawable drawable_video = getDrawable(R.drawable.tab_menu_video_image);
         drawable_video.setBounds(0,0,drawable_width,drawable_height);
         tv_video.setCompoundDrawables(null,drawable_video,null,null);
-
-        Drawable drawable_jj = getDrawable(R.drawable.tab_menu_jj_image);
-        drawable_jj.setBounds(0,0,drawable_width,drawable_height);
-        tv_jj.setCompoundDrawables(null,drawable_jj,null,null);
 
         Drawable drawable_me = getDrawable(R.drawable.tab_menu_me_image);
         drawable_me.setBounds(0,0,drawable_width,drawable_height);
@@ -102,12 +94,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         new utils(this).hideFragment(fh,fragmentTransaction);//隐藏一个Fragment
         new utils(this).hideFragment(fv,fragmentTransaction);
-        new utils(this).hideFragment(fj,fragmentTransaction);
         new utils(this).hideFragment(fm,fragmentTransaction);
 
         switch (v.getId()){
             case R.id.text_home:
-                new utils(this).resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
+                new utils(this).resetSeleceed(tv_home,tv_video,tv_me);
                 tv_home.setSelected(true);
 
                 if (fh==null){
@@ -121,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             case R.id.text_video:
-                new utils(this).resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
+                new utils(this).resetSeleceed(tv_home,tv_video,tv_me);
                 tv_video.setSelected(true);
 
                 if (fv==null){
@@ -133,22 +124,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
 
-            case R.id.text_jj:
-                new utils(this).resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
-                tv_jj.setSelected(true);
-
-                if (fj==null){
-                    fj=new fragment_jj();
-                    fragmentTransaction.add(R.id.fragment_frameLayout,fj);
-                }else{
-                    fragmentTransaction.show(fj);
-                }
-
-                break;
-
-
             case R.id.text_me:
-                new utils(this).resetSeleceed(tv_home,tv_video,tv_jj,tv_me);
+                new utils(this).resetSeleceed(tv_home,tv_video,tv_me);
                 tv_me.setSelected(true);
 
                 if (fm==null){

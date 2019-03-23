@@ -32,15 +32,6 @@
             android:text="@string/video"/>
 
         <TextView
-            android:id="@+id/text_jj"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            style="@style/titleText"
-            android:gravity="center"
-            android:text="@string/jj"/>
-
-        <TextView
             android:id="@+id/text_me"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

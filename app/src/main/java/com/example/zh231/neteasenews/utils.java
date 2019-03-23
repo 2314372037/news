@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.IllegalFormatCodePointException;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -117,6 +118,9 @@ public class utils {
 
     //修复格式坏掉的json，返回正确的json
     public static String fixJson(String json){
+        if (json==null||json==""||json.isEmpty()){
+            return "";
+        }
         if (json.contains("artiList(")){
             json=json.replace("artiList(","");
             json=json.substring(0,json.length()-1);
@@ -225,7 +229,7 @@ public class utils {
      * @param fileName
      * @return
      */
-    public void saveFile(String fileName,String content){
+    public  void saveFile(String fileName,String content){
         try {
             FileOutputStream outputStream=context.openFileOutput(fileName,Context.MODE_PRIVATE);
             outputStream.write(content.getBytes());
@@ -240,12 +244,12 @@ public class utils {
      * @param fileName
      * @return
      */
-    public String readFile(String fileName){
+    public String readFile(final String fileName){
         String content="";
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         try{
             FileInputStream inputStream = context.openFileInput(fileName);
-            int len=0;
+            int len;
             byte[] buffer = new byte[inputStream.available()];
             while((len=inputStream.read(buffer))!=-1){
                 outStream.write(buffer, 0, len);

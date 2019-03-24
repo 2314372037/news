@@ -2,38 +2,32 @@ package com.example.zh231.neteasenews;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.example.zh231.neteasenews.adapter.fragment_home_adapter;
+import com.example.zh231.neteasenews.customView.typeView;
 import com.example.zh231.neteasenews.jsonParse.homeListData;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 
 public class fragment_home extends Fragment {
 
 
     static String currentNewsType = utils.newsTypeCode.BBM54PGAwangning.toString();
-
 
     private final String TAG = "fragment_home";
 
@@ -99,6 +93,19 @@ public class fragment_home extends Fragment {
      * 初始化相关
      */
     public void initData(){
+
+        String newsType[]={"新闻","娱乐","体育","财经","军事","科技","手机","数码","时尚","游戏","教育","健康","旅游"};
+        for (String temp:newsType){
+            RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+            typeView tv=new typeView(getContext(),newsType);
+
+            homeTopView.addView(tv);
+        }
+
         String con=new utils(getContext()).readFile(utils.fileName);//尝试读取本地文件
         if (con==null||con==""||con.isEmpty()){
             Log.d(TAG,"加载在线数据");

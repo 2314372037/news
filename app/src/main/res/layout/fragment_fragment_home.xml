@@ -7,63 +7,64 @@
 
     <LinearLayout
         android:id="@+id/statusBar_layout"
-        android:orientation="vertical"
-        android:background="@color/mainColor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/mainColor"
+        android:orientation="vertical">
+
         <RelativeLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <ImageView
-                android:src="@mipmap/skin1_news_search_view_logo"
-                android:layout_margin="8dp"
-                android:layout_centerVertical="true"
                 android:layout_width="105px"
-                android:layout_height="72px" />
+                android:layout_height="72px"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:src="@mipmap/skin1_news_search_view_logo" />
+
             <Button
-                android:background="@drawable/edittext_layout"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="135px"
                 android:layout_marginRight="125px"
-                android:layout_centerVertical="true"
-                android:layout_width="match_parent"
-                android:layout_height="32dp" />
+                android:background="@drawable/edittext_layout" />
+
             <ImageView
-                android:src="@mipmap/skin1_news_main_live_icon"
-                android:layout_margin="8dp"
+                android:layout_width="105px"
+                android:layout_height="72px"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_width="105px"
-                android:layout_height="72px" />
+                android:layout_margin="8dp"
+                android:src="@mipmap/skin1_news_main_live_icon" />
 
         </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/statusBar_layout"
         android:background="@color/newsListBackground"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <HorizontalScrollView
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:orientation="vertical">
+
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
             android:id="@+id/homeTopView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </LinearLayout>
-    </HorizontalScrollView>
-    <com.example.zh231.neteasenews.customView.homeListView
-        android:id="@+id/newsListView"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:layout_height="70dp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"/>
 
-    </com.example.zh231.neteasenews.customView.homeListView>
+        <com.example.zh231.neteasenews.customView.homeListView
+            android:id="@+id/newsListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+        </com.example.zh231.neteasenews.customView.homeListView>
     </LinearLayout>
 
 </RelativeLayout>

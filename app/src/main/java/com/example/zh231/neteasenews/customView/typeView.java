@@ -26,10 +26,10 @@ public class typeView extends View {
         super(context, attrs);
         this.title=title;
         paint=new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setTextSize(35);
+        paint.setTextSize(40);
 
         rect=new Rect(0,0,1080,70);
 
@@ -56,11 +56,11 @@ public class typeView extends View {
 
         paint.setColor(Color.BLACK);
 
-        int spac = 90 ;
+        int spac = 30 ;
         for (String temp:title){
             canvas.drawText(temp,spac,40,paint);
             spac=spac+90;
         }
-
+        paint.setColor(Color.WHITE);
     }
 }

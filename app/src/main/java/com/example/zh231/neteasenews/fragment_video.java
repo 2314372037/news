@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,19 +19,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zh231.neteasenews.adapter.fragment_video_adapter;
+import com.example.zh231.neteasenews.jsonParse.homeListData;
 import com.example.zh231.neteasenews.jsonParse.videoListData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import static com.example.zh231.neteasenews.utils.fixJson;
+
 public class fragment_video extends Fragment {
 
-    private final String url_video="http://c.m.163.com/recommend/getChanListNews?channel=T1457068979049&size=20";//视频
+    //https://3g.163.com/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList
+    private final String TAG = "fragment_video";
+
+    static int start=0;//逐层，
+    static int end=10;//一次性获取的视频条数 推荐10
+
+
     static fragment_video_adapter adapter;
     static ListView listView;
-    static ArrayList<videoListData> videoList;
     static boolean isLoadingData=false;
     private videoHandle handle;
+
+    static ArrayList<videoListData> hdl=null;
 
     static class videoHandle extends Handler{
 
@@ -50,21 +61,20 @@ public class fragment_video extends Fragment {
             }
             switch (msg.what){
                 case 0:
-                    String json0 = String.valueOf(msg.obj);
-                    SparseArray<ArrayList> videoArray0 = new utils(context).parseJson_video(json0);
-                    videoList=videoArray0.get(1);
-                    adapter=new fragment_video_adapter(context,videoList);
+                    Log.d("加载在线数据完成",String.valueOf(msg.obj));
+                    hdl = new utils(context).parseJson_video(String.valueOf(msg.obj));
+                    adapter=new fragment_video_adapter(context,hdl);
                     listView.setAdapter(adapter);
                     break;
                 case 1:
-                    String json1 = String.valueOf(msg.obj);
-                    SparseArray<ArrayList> videoArray1 = new utils(context).parseJson_video(json1);
-                    ArrayList<videoListData> tempData= videoArray1.get(1);
-                    for (int i=0;i<tempData.size();i++){
-                        videoList.add(tempData.get(i));
+                    Log.d("继续加载数据完成",String.valueOf(msg.obj));
+                    if (!String.valueOf(msg.obj).equals("")){
+                        ArrayList<videoListData> tempList= new utils(context).parseJson_video(String.valueOf(msg.obj));
+                        hdl.addAll(tempList);
+                        adapter.notifyDataSetChanged();
+                    }else{
+                        Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
                     }
-
-                    adapter.notifyDataSetChanged();
                     break;
             }
             isLoadingData=false;
@@ -90,11 +100,11 @@ public class fragment_video extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (videoList!=null){
+                if (hdl!=null){
 //                    Toast.makeText(getContext(),videoList.get(position).getMp4_url(),Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent();
                     intent.setClass(getContext(),videoPlay.class);
-                    intent.putExtra("url",videoList.get(position).getMp4_url());
+                    intent.putExtra("url",hdl.get(position).getMp4_url());
                     startActivity(intent);
                 }else{
                     Toast.makeText(getContext(),"数据加载中",Toast.LENGTH_SHORT).show();
@@ -108,11 +118,12 @@ public class fragment_video extends Fragment {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
             }
-
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem+visibleItemCount==totalItemCount){
                     if (!isLoadingData){
+                        //修改start and end，实现向后加载
+                        start=start+end; //接着最后一条视频获取 例如： 第一次0-10，第二次10-10，第三次20-10
                         loadingData(1);
                     }
                 }
@@ -129,10 +140,22 @@ public class fragment_video extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String json=new utils(getContext()).sendGet(url_video);
+                String content="";
+                switch (what){
+                    case 0://在线加载
+                        content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd);
+                        content=utils.fixJson(content);
+                        Log.d(TAG,"加载在线数据"+content);
+                        break;
+                    case 1://继续加载
+                        content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd);
+                        content=utils.fixJson(content);
+                        Log.d(TAG,"继续加载数据"+content);
+                        break;
+                }
                 Message message=new Message();
                 message.what=what;
-                message.obj=json;
+                message.obj=content;
                 handle.sendMessage(message);
             }
         }).start();

@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Formatter;
-import java.util.IllegalFormatCodePointException;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,7 +40,10 @@ public class utils {
 
     static final String UrlBody="/touch/reconstruct/article/list/";
 
-    static final String videoUrl="/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList";
+    static final String videoUrlBody="/touch/nc/api/video/recommend/Video_Recom/";
+
+    static final String videoUrlEnd=".do?callback=videoList";//完整格式 0-10.do?callback=videoList
+
 
     public enum newsTypeCode{
         BBM54PGAwangning,//新闻
@@ -102,7 +104,8 @@ public class utils {
         Log.d("url-------------",url);
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .header("User-Agent","Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36")
+                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0")
+                .header("Connection","keep-alive")
                 .get().url(url).build();
         Call call=client.newCall(request);
         String con=null;
@@ -123,6 +126,10 @@ public class utils {
         }
         if (json.contains("artiList(")){
             json=json.replace("artiList(","");
+            json=json.substring(0,json.length()-1);
+        }
+        if (json.contains("videoList(")){
+            json=json.replace("videoList(","");
             json=json.substring(0,json.length()-1);
         }
         return json;
@@ -155,48 +162,21 @@ public class utils {
      * @param json
      * @return videoTopic未使用，sparseArray的1为videoListData
      */
-    public SparseArray<ArrayList> parseJson_video(String json){
+    public ArrayList<videoListData> parseJson_video(String json){
 
-//        ArrayList<videoTopic> vt=new ArrayList<>();
-        ArrayList<videoListData> vld=new ArrayList<>();
-//        try{
-//            JSONObject vldObj=new JSONObject(json);
-//            JSONArray vldArr = vldObj.getJSONArray("视频");
-//            for (int i=0;i<vldArr.length();i++){
-//                videoListData videoListTemp=new videoListData();
-//                JSONObject itemObj = vldArr.getJSONObject(i);
-//                videoListTemp.setCategory(itemObj.getString("category"));
-//                videoListTemp.setFirstFrameImg(itemObj.getString("firstFrameImg"));
-//                videoListTemp.setFullSizeImg(itemObj.getString("fullSizeImg"));
-//                videoListTemp.setLength(itemObj.getInt("length"));
-//                if (itemObj.has("mp4Hd_url"))
-//                videoListTemp.setMp4_url(itemObj.getString("mp4Hd_url"));//这里为高清
-//                else if (itemObj.has("mp4_url"))
-//                    videoListTemp.setMp4_url(itemObj.getString("mp4_url"));//没有高清选择标清
-//                videoListTemp.setPlayCount(itemObj.getInt("playCount"));
-//                videoListTemp.setPtime(itemObj.getString("ptime"));
-//                videoListTemp.setReplyCount(itemObj.getInt("replyCount"));
-//                videoListTemp.setReplyid(itemObj.getString("replyid"));
-//                videoListTemp.setSectiontitle(itemObj.getString("sectiontitle"));
-//                videoListTemp.setTitle(itemObj.getString("title"));
-//                videoListTemp.setTopicDesc(itemObj.getString("topicDesc"));
-//                videoListTemp.setTopicImg(itemObj.getString("topicImg"));
-//                videoListTemp.setTopicName(itemObj.getString("topicName"));
-//                videoListTemp.setTopicSid(itemObj.getString("topicSid"));
-//                videoListTemp.setVid(itemObj.getString("vid"));
-//                videoListTemp.setVideoRatio(itemObj.getDouble("videoRatio"));
-//                videoListTemp.setVoteCount(itemObj.getInt("voteCount"));
-//                videoListTemp.setVideosource(itemObj.getString("videosource"));
-//                vld.add(videoListTemp);
-//            }
-//
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//
-        SparseArray<ArrayList> array=new SparseArray<>();
-////        array.put(0,vt);
-//        array.put(1,vld);
+        JsonParser jsonParser=new JsonParser();
+        JsonObject jsonObject=jsonParser.parse(json).getAsJsonObject();
+        JsonArray jsonArray=jsonObject.getAsJsonArray("Video_Recom");
+
+        Gson gson=new Gson();
+        ArrayList<videoListData> ListItem=new ArrayList<>();//所有数据在这里
+        for(JsonElement element : jsonArray){
+            videoListData hld = gson.fromJson(element,videoListData.class);
+            ListItem.add(hld);
+        }
+
+
+        ArrayList<videoListData> array=new ArrayList<>();
         return array;
     }
 

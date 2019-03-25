@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".searchActivity">
 <RelativeLayout
     android:orientation="horizontal"
@@ -11,6 +12,7 @@
     android:layout_height="wrap_content">
 
     <Button
+        android:id="@+id/search_backBtn"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_width="28dp"
@@ -36,4 +38,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp" />
 </RelativeLayout>
+    <ListView
+        android:id="@+id/rec_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </ListView>
 </LinearLayout>

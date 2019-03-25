@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -41,6 +43,8 @@ public class fragment_home extends Fragment {
     static fragment_home_adapter adapter;
     private homeHandle handle;
     static ArrayList<homeListData> hdl=null;
+
+    Button search_Btn=null;
 
 
     static class homeHandle extends Handler{
@@ -131,7 +135,18 @@ public class fragment_home extends Fragment {
 
         listView = view.findViewById(R.id.newsListView);
 
+        search_Btn = view.findViewById(R.id.search_Btn);
+
         initData();
+
+        search_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(),searchActivity.class);
+                intent.putExtra("from","home");
+                startActivity(intent);
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

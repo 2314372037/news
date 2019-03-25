@@ -25,12 +25,13 @@
                 android:src="@mipmap/skin1_news_search_view_logo" />
 
             <Button
+                android:id="@+id/search_Btn"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="135px"
                 android:layout_marginRight="125px"
-                android:background="@drawable/edittext_layout" />
+                android:background="@drawable/edittextbtn_layout" />
 
             <ImageView
                 android:layout_width="105px"
@@ -53,7 +54,7 @@
         <LinearLayout
             android:id="@+id/homeTopView"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="40dp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"/>
 

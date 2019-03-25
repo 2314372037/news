@@ -38,12 +38,12 @@ public class fragment_video_adapter<T> extends commonAdapter<T>{
 
         videoTitle.setText(vld.getTitle());
         videoLength.setText(new utils(mContext).stringForTime(vld.getLength()));
-        Glide.with(mContext).load(vld.getFirstFrameImg()).into(videoImage);
+        Glide.with(mContext).load(vld.getCover()).into(videoImage);
 
         imageButton ib_voteCount=viewHolder.getView(R.id.ib_voteCount);
         imageButton ib_replyCount=viewHolder.getView(R.id.ib_replyCount);
 
-        ib_voteCount.setText(String.valueOf(vld.getVoteCount()));
+        ib_voteCount.setText(String.valueOf(vld.getVotecount()));
         ib_replyCount.setText(String.valueOf(vld.getReplyCount()));
 
         return viewHolder.getConvertView();

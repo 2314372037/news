@@ -56,7 +56,7 @@ public class newsContent extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String html=new utils(newsContent.this).sendGet(url);
+                    String html=new utils(newsContent.this).sendGet(url,null);
                     String main="解析失败";
                     try{
                         main=new utils(newsContent.this).parseHtml(html);

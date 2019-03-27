@@ -41,8 +41,8 @@ public class typeView extends View {
         int minW=getSuggestedMinimumWidth();
         int minH=getSuggestedMinimumHeight();
 
-        Log.d(tag,"宽:"+widthMeasureSpec);
-        Log.d(tag,"高:"+heightMeasureSpec);
+        //Log.d(tag,"宽:"+widthMeasureSpec);
+        //Log.d(tag,"高:"+heightMeasureSpec);
 
 
     }

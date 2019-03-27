@@ -1,8 +1,6 @@
 # news
 
-仿网易新闻,没有讲讲和登陆(仅实现主要功能)
-
-数据来自:https://blog.csdn.net/github_37360787/article/details/79529021
+仿网易新闻,没有登陆(仅实现主要功能)
 
 [APK下载](screenshots/app-debug.apk)
 

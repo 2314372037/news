@@ -11,6 +11,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -114,18 +115,22 @@ public class fragment_video extends Fragment {
         });
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            boolean ssc=false;
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                ssc=true;
             }
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem+visibleItemCount==totalItemCount){
-                    if (!isLoadingData){
-                        //修改start and end，实现向后加载
-                        start=start+end; //接着最后一条视频获取 例如： 第一次0-10，第二次10-10，第三次20-10
-                        loadingData(1);
+                if (ssc){
+                    if (firstVisibleItem+visibleItemCount==totalItemCount){
+                        if (!isLoadingData) {
+                            //修改start and end，实现向后加载
+                            start = start + end; //接着最后一条视频获取 例如： 第一次0-10，第二次10-10，第三次20-10
+                            loadingData(1); //先破解接口协议
+                        }
                     }
+                    ssc=false;
                 }
             }
         });
@@ -141,14 +146,15 @@ public class fragment_video extends Fragment {
             @Override
             public void run() {
                 String content="";
+                String cookie="";
                 switch (what){
                     case 0://在线加载
-                        content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd);
+                        content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd,cookie);
                         content=utils.fixJson(content);
                         Log.d(TAG,"加载在线数据"+content);
                         break;
                     case 1://继续加载
-                        content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd);
+                        content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd,cookie);
                         content=utils.fixJson(content);
                         Log.d(TAG,"继续加载数据"+content);
                         break;

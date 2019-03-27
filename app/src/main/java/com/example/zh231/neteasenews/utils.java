@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.util.SparseArray;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.example.zh231.neteasenews.jsonParse.homeListData;
@@ -15,20 +15,21 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class utils {
@@ -43,6 +44,8 @@ public class utils {
     static final String videoUrlBody="/touch/nc/api/video/recommend/Video_Recom/";
 
     static final String videoUrlEnd=".do?callback=videoList";//完整格式 0-10.do?callback=videoList
+
+    static final String user_agent="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
 
 
     public enum newsTypeCode{
@@ -100,22 +103,53 @@ public class utils {
         return result;
     }
 
-    static String sendGet(String url){
+    static String sendGet(String url,String cookie){
         Log.d("url-------------",url);
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0")
-                .header("Connection","keep-alive")
-                .get().url(url).build();
-        Call call=client.newCall(request);
         String con=null;
+        URLConnection connection=null;
         try{
-            Response response=call.execute();
-            con=response.body().string();
-        }catch (IOException io){
-            io.printStackTrace();
+            URL url1=new URL(url);
+            connection=url1.openConnection();
+            connection.setUseCaches(false);
+            connection.addRequestProperty("User-Agent",user_agent);
+            connection.addRequestProperty("Connection","keep-alive");
+            if (cookie!=null)
+            connection.addRequestProperty("Cookie",cookie);
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setAllowUserInteraction(false);
+            connection.connect();
         }
-        //Log.d("response------",con);
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+            BufferedReader bufferedReader=new BufferedReader(streamReader);
+            StringBuffer stringBuffer=new StringBuffer();
+            String line;
+            while ((line=bufferedReader.readLine())!=null){
+                stringBuffer.append(line);
+            }
+            con=stringBuffer.toString();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+//        OkHttpClient client = new OkHttpClient();
+//        Request request = new Request.Builder()
+//                .header("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:65.0) Gecko/20100101 Firefox/65.0")
+//                .header("Connection","keep-alive")
+//                .get().url(url).build();
+//        Call call=client.newCall(request);
+//        String con=null;
+//        try{
+//            Response response=call.execute();
+//            con=response.body().string();
+//        }catch (IOException io){
+//            io.printStackTrace();
+//        }
+        if (con!=null)
+        Log.d("response------",con);
         return con;
     }
 
@@ -156,6 +190,33 @@ public class utils {
         return ListItem;
     }
 
+    /**
+     * 视频接口需要主机cookie，先访问主机地址,再获取cookie，用此cookie请求视频接口
+     * @return
+     */
+    static String getHostCookies(String url){
+        String cookie=null;
+        URLConnection connection=null;
+        try{
+            URL url1=new URL(url);
+            connection=url1.openConnection();
+            connection.setUseCaches(false);
+            connection.addRequestProperty("User-Agent",user_agent);
+            connection.addRequestProperty("Connection","keep-alive");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setAllowUserInteraction(false);
+            connection.connect();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        Map<String, List<String>> map=connection.getHeaderFields();
+        if (map.containsKey("Cookie")){
+            cookie=map.get("Cookie").get(0);
+        }
+        return cookie;
+    }
 
     /**
      * 解析视频数据
@@ -174,10 +235,7 @@ public class utils {
             videoListData hld = gson.fromJson(element,videoListData.class);
             ListItem.add(hld);
         }
-
-
-        ArrayList<videoListData> array=new ArrayList<>();
-        return array;
+        return ListItem;
     }
 
     /**

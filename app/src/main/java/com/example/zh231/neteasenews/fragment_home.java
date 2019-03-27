@@ -188,7 +188,7 @@ public class fragment_home extends Fragment {
                 String content="";
                 switch (what){
                     case 0://在线加载
-                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html");
+                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html",null);
                         content=utils.fixJson(content);
                         Log.d(TAG,"加载在线数据"+content);
                         break;
@@ -197,7 +197,7 @@ public class fragment_home extends Fragment {
                         Log.d(TAG,"加载本地数据"+content);
                         break;
                     case 2://继续加载
-                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html");
+                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html",null);
                         content=utils.fixJson(content);
                         Log.d(TAG,"继续加载数据"+content);
                         break;

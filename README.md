@@ -1,6 +1,6 @@
 # news
 
-仿网易新闻,没有登陆(仅实现主要功能)
+仿网易新闻,暂无登陆(仅实现主要功能)
 
 [APK下载](screenshots/app-debug.apk)
 

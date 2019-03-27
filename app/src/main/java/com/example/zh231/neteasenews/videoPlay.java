@@ -1,9 +1,13 @@
 package com.example.zh231.neteasenews;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -12,6 +16,20 @@ public class videoPlay extends AppCompatActivity {
 
     private String videoUrl;
     private VideoView videoView;
+    private SeekBar seekbar;
+
+    private Handler handler = new Handler();
+    private Runnable run =  new Runnable() {
+        int currentPosition, duration;
+        public void run() {
+            currentPosition = videoView.getCurrentPosition();
+            duration = videoView.getDuration();
+            int time = ((currentPosition * 100) / duration);
+            seekbar.setProgress(time);
+            //Log.d("获取进度",""+time);
+            handler.postDelayed(run, 1000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +37,13 @@ public class videoPlay extends AppCompatActivity {
         setContentView(R.layout.activity_video_play);
 
         videoView=findViewById(R.id.videoView);
+        seekbar=findViewById(R.id.seekbar);
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                finish();
+            }
+        });
 
         Intent intent=getIntent();
         videoUrl = intent.getStringExtra("url");
@@ -34,6 +59,7 @@ public class videoPlay extends AppCompatActivity {
         if (!videoView.isPlaying()){
             videoView.setVideoURI(Uri.parse(url));
             videoView.start();
+            handler.post(run);
         }
     }
 
@@ -63,6 +89,7 @@ public class videoPlay extends AppCompatActivity {
             if (videoView.isPlaying()){
                 videoView.stopPlayback();
             }
+            handler.removeCallbacks(run);
             videoView=null;
         }
         super.onDestroy();

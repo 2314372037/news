@@ -161,17 +161,23 @@ public class fragment_home extends Fragment {
         });
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {//滚动到底部自动加载
+            boolean ssc=false;
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                ssc=true;
+            }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem+visibleItemCount==totalItemCount){
-                    if (!isLoadingData){
-                        //修改start and end，实现向后加载
-                        start=start+end; //接着最后一条新闻获取 例如： 第一次0-20，第二次20-20，第三次40-20
-                        loadingData(2);
+                if (ssc){
+                    if (firstVisibleItem+visibleItemCount==totalItemCount){
+                        if (!isLoadingData){
+                            //修改start and end，实现向后加载
+                            start=start+end; //接着最后一条新闻获取 例如： 第一次0-20，第二次20-20，第三次40-20
+                            loadingData(2);
+                        }
                     }
+                    ssc=false;
                 }
             }
         });

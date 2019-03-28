@@ -2,6 +2,8 @@ package com.example.zh231.neteasenews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +13,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -82,6 +85,13 @@ public class fragment_video extends Fragment {
         }
     }
 
+    private void setStatusBarColor(){
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getActivity().getWindow().setStatusBarColor(Color.WHITE);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +105,8 @@ public class fragment_video extends Fragment {
         View view=inflater.inflate(R.layout.fragment_fragment_video,container,false);
 
         listView=view.findViewById(R.id.videoListView);
+
+        //setStatusBarColor();
 
         loadingData(0);
 

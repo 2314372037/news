@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item android:state_active="true" android:drawable="#FD3333"/>-->
+    <!--<item android:state_pressed="true" android:drawable="#CA9292"/>-->
+    <!--<item android:state_focused="true" android:drawable="#CA9292"/>-->
     <solid android:color="#FD3333"/>
     <corners android:radius="10dp"/>
 </shape>

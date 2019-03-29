@@ -56,6 +56,23 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         me_content=view.findViewById(R.id.me_content);
         me_login = view.findViewById(R.id.me_login);
 
+        View ffl=LayoutInflater.from(getContext()).inflate(R.layout.fragment_fragment_login,null);
+        username_edt=ffl.findViewById(R.id.username_edt);
+        password_edt=ffl.findViewById(R.id.password_edt);
+        error_text=ffl.findViewById(R.id.error_text);
+        login_btn1=ffl.findViewById(R.id.login_btn1);
+        forget_psd=ffl.findViewById(R.id.forget_psd);
+        register_user=ffl.findViewById(R.id.register_user);
+        login_qq=ffl.findViewById(R.id.login_qq);
+        login_weibo=ffl.findViewById(R.id.login_weibo);
+
+        login_btn1.setOnClickListener(this);
+        forget_psd.setOnClickListener(this);
+        register_user.setOnClickListener(this);
+        login_qq.setOnClickListener(this);
+        login_weibo.setOnClickListener(this);
+        me_login.addView(ffl);
+
         //判断是否登录
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("loginInfo", MODE_PRIVATE);
         if (sharedPreferences==null){
@@ -65,26 +82,11 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         islogin = sharedPreferences.getBoolean("islogin", false);
 
         if (!islogin) {
-            View ffl=LayoutInflater.from(getContext()).inflate(R.layout.fragment_fragment_login,null);
-
-            username_edt=ffl.findViewById(R.id.username_edt);
-            password_edt=ffl.findViewById(R.id.password_edt);
-            error_text=ffl.findViewById(R.id.error_text);
-            login_btn1=ffl.findViewById(R.id.login_btn1);
-            forget_psd=ffl.findViewById(R.id.forget_psd);
-            register_user=ffl.findViewById(R.id.register_user);
-            login_qq=ffl.findViewById(R.id.login_qq);
-            login_weibo=ffl.findViewById(R.id.login_weibo);
-
-            login_btn1.setOnClickListener(this);
-            forget_psd.setOnClickListener(this);
-            register_user.setOnClickListener(this);
-            login_qq.setOnClickListener(this);
-            login_weibo.setOnClickListener(this);
-
-            me_login.addView(ffl);
             me_content.setVisibility(View.INVISIBLE);
             me_login.setVisibility(View.VISIBLE);
+        }else{
+            me_content.setVisibility(View.VISIBLE);
+            me_login.setVisibility(View.INVISIBLE);
         }
 
         //setStatusBarColor();

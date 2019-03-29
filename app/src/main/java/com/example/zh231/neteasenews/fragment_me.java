@@ -106,11 +106,8 @@ public class fragment_me extends Fragment implements View.OnClickListener{
                 editor.putBoolean("islogin",false);
                 editor.apply();
                 Toast.makeText(getContext(),"已退出",Toast.LENGTH_SHORT).show();
-                me_content.setVisibility(View.VISIBLE);
-                me_login.removeAllViews();
-//                getFragmentManager().beginTransaction().hide(this).commit();
-//                getFragmentManager().beginTransaction().remove(this).commit();
-//                getFragmentManager().beginTransaction().replace(R.id.fragment_frameLayout,fl).commit();
+                me_content.setVisibility(View.INVISIBLE);
+                me_login.setVisibility(View.VISIBLE);
 
                 break;
             case R.id.login_btn1://登录
@@ -133,23 +130,28 @@ public class fragment_me extends Fragment implements View.OnClickListener{
                     //editor.putString("token","");
                     //editor.putString("cookie","");
                     editor1.apply();
-                    me_content.setVisibility(View.INVISIBLE);
-                    me_login.setVisibility(View.VISIBLE);
+                    me_content.setVisibility(View.VISIBLE);
+                    me_login.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext(),"登录成功",Toast.LENGTH_SHORT).show();
 //                    getFragmentManager().beginTransaction().hide(this).commit();
 //                    getFragmentManager().beginTransaction().remove(this).commit();
 //                    getFragmentManager().beginTransaction().replace(R.id.fragment_frameLayout,fm).commit();
                 }
                 break;
             case R.id.forget_psd://忘记密码
+                Toast.makeText(getContext(),"忘记密码",Toast.LENGTH_SHORT).show();
 
                 break;
             case R.id.register_user://注册用户
+                Toast.makeText(getContext(),"注册用户",Toast.LENGTH_SHORT).show();
 
                 break;
             case R.id.login_qq://qq登录
+                Toast.makeText(getContext(),"QQ登录",Toast.LENGTH_SHORT).show();
 
                 break;
             case R.id.login_weibo://微博登录
+                Toast.makeText(getContext(),"微博登录",Toast.LENGTH_SHORT).show();
 
                 break;
         }

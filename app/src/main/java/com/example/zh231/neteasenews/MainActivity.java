@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private fragment_home fh;
     private fragment_video fv;
     private fragment_me fm;
-    private fragment_login fl;
 
     private String TAG="MainActivity";
 
@@ -84,8 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         new utils(this).hideFragment(fh,fragmentTransaction);//隐藏一个Fragment
         new utils(this).hideFragment(fv,fragmentTransaction);
-        new utils(this).hideFragment(fm,fragmentTransaction);//为空无法隐藏
-        new utils(this).hideFragment(fl,fragmentTransaction);//为空无法隐藏
+        new utils(this).hideFragment(fm,fragmentTransaction);
 
         switch (v.getId()){
             case R.id.text_home:
@@ -119,26 +117,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new utils(this).resetSeleceed(tv_home,tv_video,tv_me);
                 tv_me.setSelected(true);
 
-                //做判断，判断是否登录
-                SharedPreferences sharedPreferences=getSharedPreferences("loginInfo",MODE_PRIVATE);
-                boolean islogin = sharedPreferences.getBoolean("islogin",false);
-
-                if (!islogin){//fl和fm为空了!!!
-                    if (fl==null){
-                        fl=new fragment_login();
-                        fragmentTransaction.add(R.id.fragment_frameLayout,fl);
-                    }else{
-                        fragmentTransaction.show(fl);
-                    }
+                if (fm==null){
+                    fm=new fragment_me();
+                    fragmentTransaction.add(R.id.fragment_frameLayout,fm);
                 }else{
-                    if (fm==null){
-                        fm=new fragment_me();
-                        fragmentTransaction.add(R.id.fragment_frameLayout,fm);
-                    }else{
-                        fragmentTransaction.show(fm);
-                    }
+                    fragmentTransaction.show(fm);
                 }
-
                 break;
 
 

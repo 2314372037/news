@@ -6,24 +6,84 @@
     tools:context=".fragment_me">
 
     <!-- TODO: Update blank fragment layout -->
-<FrameLayout
+<LinearLayout
     android:id="@+id/me_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_gravity="center"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+<LinearLayout
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/userImg"
+        android:src="@mipmap/qq_log"
+        android:layout_width="110dp"
+        android:layout_height="110dp" />
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/colorAccent"
-        android:gravity="center"
-        android:textSize="36dp"
-        android:text="@string/text_me" />
-    <Button
-        android:layout_gravity="bottom"
-        android:id="@+id/logout_btn"
-        android:text="退出登录"
-        android:layout_width="match_parent"
+        android:layout_margin="15dp"
+        android:id="@+id/username_tv"
+        android:text="测试名称"
+        android:textSize="26dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-</FrameLayout>
+</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/email_btn"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@mipmap/email"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:textSize="26dp"
+            android:text="我的邮箱"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/comment_btn"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@mipmap/log"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:text="我的跟帖"
+            android:textSize="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/logout_btn"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@mipmap/exit"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <TextView
+            android:text="退出登录"
+            android:textSize="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>
     <FrameLayout
         android:id="@+id/me_login"
         android:layout_marginTop="100dp"

@@ -13,10 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
+import android.webkit.ValueCallback;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,10 +35,15 @@ public class fragment_me extends Fragment implements View.OnClickListener{
     private TextView register_user=null;
     private ImageButton login_qq=null;
     private ImageButton login_weibo=null;
-    private Button logout_btn=null;
+    private LinearLayout logout_btn=null;
+    private LinearLayout email_btn=null;
+    private LinearLayout comment_btn=null;
+    private ImageView userImg=null;
+    private TextView username_tv=null;
     private boolean islogin=false;
+    CookieManager cookieManager=null;
 
-    FrameLayout me_content;
+    LinearLayout me_content;
     FrameLayout me_login;
 
     @Override
@@ -53,10 +61,16 @@ public class fragment_me extends Fragment implements View.OnClickListener{
 
         view = inflater.inflate(R.layout.fragment_fragment_me, container, false);
         logout_btn=view.findViewById(R.id.logout_btn);
+        email_btn=view.findViewById(R.id.email_btn);
+        comment_btn=view.findViewById(R.id.comment_btn);
         logout_btn.setOnClickListener(this);
+        comment_btn.setOnClickListener(this);
+        email_btn.setOnClickListener(this);
 
         me_content=view.findViewById(R.id.me_content);
         me_login = view.findViewById(R.id.me_login);
+        userImg=view.findViewById(R.id.userImg);
+        username_tv=view.findViewById(R.id.username_tv);
 
         View ffl=LayoutInflater.from(getContext()).inflate(R.layout.fragment_fragment_login,null);
         username_edt=ffl.findViewById(R.id.username_edt);
@@ -104,12 +118,36 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         }
     }
 
+
+    private void cleanCookie(){//当获取用户信息或判断cookie无效时，应该调用并重新登录
+        if (cookieManager==null){
+            cookieManager=CookieManager.getInstance();
+        }
+        cookieManager.removeAllCookies(new ValueCallback<Boolean>() {
+            @Override
+            public void onReceiveValue(Boolean value) {
+                Log.d("调试","清除全部cookie"+value);
+            }
+        });
+    }
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {//ui线程
         super.onActivityResult(requestCode, resultCode, data);
-        //返回码为2就是登录成功
         Log.d("调试","请求码:"+requestCode);
         Log.d("调试","返回码:"+resultCode);
+
+        if (resultCode==2){//返回码为2就是登录成功
+                SharedPreferences.Editor editor1=getContext().getSharedPreferences("loginInfo", Context.MODE_PRIVATE).edit();
+                if (editor1!=null){
+                    editor1.putBoolean("islogin",true);
+                    editor1.apply();
+                    me_content.setVisibility(View.VISIBLE);
+                    me_login.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext(),"登录成功",Toast.LENGTH_SHORT).show();
+                    //获取用户信息并显示
+                }
+        }
 //        CookieManager cookieManager= CookieManager.getInstance();
 //        String cookie=cookieManager.getCookie("https://3g.163.com/touch/");
 //        if (cookie.contains("_antanalysis_s_id")&&
@@ -127,16 +165,24 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         intent.setClass(getContext(),webLoginActivity.class);
         switch (v.getId()){
             case R.id.logout_btn:
+                //这里清除Cookie
+                cleanCookie();
                 SharedPreferences.Editor editor=getContext().getSharedPreferences("loginInfo", MODE_PRIVATE).edit();
                 editor.putBoolean("islogin",false);
                 editor.apply();
                 Toast.makeText(getContext(),"已退出",Toast.LENGTH_SHORT).show();
                 me_content.setVisibility(View.INVISIBLE);
                 me_login.setVisibility(View.VISIBLE);
+                break;
+            case R.id.comment_btn:
+
+                break;
+            case R.id.email_btn:
 
                 break;
             case R.id.login_btn1://网易账号登录
                 Log.d("调试","点击登录");
+
                 if (username_edt.getText().toString().equals("")){
                     error_text.setText("请输入账号");
                     error_text.setVisibility(View.VISIBLE);
@@ -148,17 +194,18 @@ public class fragment_me extends Fragment implements View.OnClickListener{
                     return;
                 }
                 error_text.setVisibility(View.INVISIBLE);
-                //一系列登录操作...
-                SharedPreferences.Editor editor1=getContext().getSharedPreferences("loginInfo", Context.MODE_PRIVATE).edit();
-                if (editor1!=null){
-                    editor1.putBoolean("islogin",true);
-                    //editor.putString("token","");
-                    //editor.putString("cookie","");
-                    editor1.apply();
-                    me_content.setVisibility(View.VISIBLE);
-                    me_login.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getContext(),"登录成功",Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(getContext(),"暂不可用",Toast.LENGTH_SHORT).show();
+//                //一系列登录操作...
+//                SharedPreferences.Editor editor1=getContext().getSharedPreferences("loginInfo", Context.MODE_PRIVATE).edit();
+//                if (editor1!=null){
+//                    editor1.putBoolean("islogin",true);
+//                    //editor.putString("token","");
+//                    //editor.putString("cookie","");
+//                    editor1.apply();
+//                    me_content.setVisibility(View.VISIBLE);
+//                    me_login.setVisibility(View.INVISIBLE);
+//                    Toast.makeText(getContext(),"登录成功",Toast.LENGTH_SHORT).show();
+//                }
                 break;
             case R.id.forget_psd://忘记密码
                 Toast.makeText(getContext(),"忘记密码",Toast.LENGTH_SHORT).show();

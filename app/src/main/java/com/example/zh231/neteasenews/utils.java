@@ -225,6 +225,9 @@ public class utils {
      */
     public ArrayList<videoListData> parseJson_video(String json){
 
+        if (json==null){
+            return null;
+        }
         JsonParser jsonParser=new JsonParser();
         JsonObject jsonObject=jsonParser.parse(json).getAsJsonObject();
         JsonArray jsonArray=jsonObject.getAsJsonArray("Video_Recom");

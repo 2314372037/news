@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -104,6 +105,23 @@ public class fragment_me extends Fragment implements View.OnClickListener{
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //返回码为2就是登录成功
+        Log.d("调试","请求码:"+requestCode);
+        Log.d("调试","返回码:"+resultCode);
+//        CookieManager cookieManager= CookieManager.getInstance();
+//        String cookie=cookieManager.getCookie("https://3g.163.com/touch/");
+//        if (cookie.contains("_antanalysis_s_id")&&
+//                cookie.contains("NTES_OSESS")&&
+//                cookie.contains("S_OINFO")&&
+//                cookie.contains("P_OINFO"))
+//        {
+//
+//        }
+    }
+
+    @Override
     public void onClick(View v) {
         Intent intent=new Intent();
         intent.setClass(getContext(),webLoginActivity.class);
@@ -160,7 +178,7 @@ public class fragment_me extends Fragment implements View.OnClickListener{
             case R.id.login_weibo://微博登录
                 Toast.makeText(getContext(),"微博登录",Toast.LENGTH_SHORT).show();
                 intent.putExtra("from",4);
-                startActivity(intent);
+                startActivityForResult(intent,1);//返回码为2就是登录成功
                 break;
         }
     }

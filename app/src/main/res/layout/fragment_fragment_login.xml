@@ -12,12 +12,14 @@
         <EditText
             android:id="@+id/username_edt"
             android:background="@drawable/login_edt"
+            android:textSize="16dp"
             android:layout_width="300dp"
             android:layout_height="60dp" />
 
         <EditText
             android:layout_marginTop="5dp"
             android:id="@+id/password_edt"
+            android:textSize="16dp"
             android:inputType="textPassword"
             android:background="@drawable/login_edt"
             android:layout_width="300dp"
@@ -26,6 +28,7 @@
             android:id="@+id/error_text"
             android:visibility="invisible"
             android:textColor="#FF4848"
+            android:textSize="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

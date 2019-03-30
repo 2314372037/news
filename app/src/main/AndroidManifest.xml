@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".searchActivity"></activity>
+        <activity android:name=".webLoginActivity"></activity>
+        <activity android:name=".searchActivity" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">

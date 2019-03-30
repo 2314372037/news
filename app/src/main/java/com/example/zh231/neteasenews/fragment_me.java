@@ -1,6 +1,7 @@
 package com.example.zh231.neteasenews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -71,6 +72,8 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         register_user.setOnClickListener(this);
         login_qq.setOnClickListener(this);
         login_weibo.setOnClickListener(this);
+        username_edt.setHint("邮箱");
+        password_edt.setHint("密码");
         me_login.addView(ffl);
 
         //判断是否登录
@@ -102,6 +105,8 @@ public class fragment_me extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Intent intent=new Intent();
+        intent.setClass(getContext(),webLoginActivity.class);
         switch (v.getId()){
             case R.id.logout_btn:
                 SharedPreferences.Editor editor=getContext().getSharedPreferences("loginInfo", MODE_PRIVATE).edit();
@@ -112,7 +117,7 @@ public class fragment_me extends Fragment implements View.OnClickListener{
                 me_login.setVisibility(View.VISIBLE);
 
                 break;
-            case R.id.login_btn1://登录
+            case R.id.login_btn1://网易账号登录
                 Log.d("调试","点击登录");
                 if (username_edt.getText().toString().equals("")){
                     error_text.setText("请输入账号");
@@ -139,31 +144,25 @@ public class fragment_me extends Fragment implements View.OnClickListener{
                 break;
             case R.id.forget_psd://忘记密码
                 Toast.makeText(getContext(),"忘记密码",Toast.LENGTH_SHORT).show();
-
+                intent.putExtra("from",1);
+                startActivity(intent);
                 break;
             case R.id.register_user://注册用户
                 Toast.makeText(getContext(),"注册用户",Toast.LENGTH_SHORT).show();
-
+                intent.putExtra("from",2);
+                startActivity(intent);
                 break;
             case R.id.login_qq://qq登录
                 Toast.makeText(getContext(),"QQ登录",Toast.LENGTH_SHORT).show();
-
+                intent.putExtra("from",3);
+                startActivity(intent);
                 break;
             case R.id.login_weibo://微博登录
                 Toast.makeText(getContext(),"微博登录",Toast.LENGTH_SHORT).show();
-
+                intent.putExtra("from",4);
+                startActivity(intent);
                 break;
         }
     }
 
-
-    private void loginForWeibo(){//微博登录
-        /*说明:访问url1获取请求头"Location"，访问获取到的Location获取请求头SINA-LB和SINA-TS，保存这两值(Location为微博登录api网页地址)，（未知:请求Location需要带一个Cookie，内容为SCF=xxxxx;SUB=xxxx）
-          输入账号信息后点登录,然后请求https://api.weibo.com/oauth2/authorize，请求头Cookie:为之前的SCF=xxxxx;SUB=xxxx，保存响应头Set-Cookie,获取请求头Location，访问并获取请求头Set-Cookie保存
-          (未知:访问时注意带_ntes_nnid)，后面的请求Cookie带_ntes_nnid=请求
-         */
-        String url1="https://reg.163.com/outerLogin/oauth2/connect.do?target=3&url=https://3g.163.com/touch/all?ver=c&url2=" +
-                "https://3g.163.com/touch/all?ver=c&domains=163.com&display=mobile&product=3g_163";
-
-    }
 }

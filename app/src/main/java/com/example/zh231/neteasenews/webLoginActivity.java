@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -21,12 +23,14 @@ public class webLoginActivity extends AppCompatActivity {
     CookieManager cookieManager;
     private String cookie;
     private String nesUrl="https://3g.163.com/touch/";
+    private LinearLayout webRootLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_login);
 
+        webRootLayout=findViewById(R.id.webRootLayout);
         webview=findViewById(R.id.webview);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.setWebViewClient(new WebViewClient(){
@@ -34,7 +38,10 @@ public class webLoginActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Log.d("调试","重定向:"+request.getUrl());
                 if (request.getUrl().toString().contains("https://3g.163.com")){
-                    return true;
+                    ViewGroup.LayoutParams vl=webRootLayout.getLayoutParams();
+                    vl.height=1;
+
+                    webRootLayout.setLayoutParams(vl);
                 }
                 return super.shouldOverrideUrlLoading(view, request);
             }

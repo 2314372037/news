@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -22,6 +23,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
+import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -105,6 +113,7 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         }else{
             me_content.setVisibility(View.VISIBLE);
             me_login.setVisibility(View.INVISIBLE);
+            getUserInfo();
         }
 
         //setStatusBarColor();
@@ -131,6 +140,73 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         });
     }
 
+    private void exitAndClean(){//退出登录状态，并清除cookie
+        cleanCookie();
+        SharedPreferences.Editor editor=getContext().getSharedPreferences("loginInfo", MODE_PRIVATE).edit();
+        editor.putBoolean("islogin",false);
+        editor.apply();
+        me_content.setVisibility(View.INVISIBLE);
+        me_login.setVisibility(View.VISIBLE);
+    }
+
+    //获取用户信息并显示看
+    private void getUserInfo(){
+        //获取用户信息需要生成8位随机数,例https://3g.163.com/touch/nc/api/jsonp/oauth/common/info.do?__rnd=78089314&callback=oauth_info，请求时带上cookies
+
+        if (cookieManager==null){
+            cookieManager= CookieManager.getInstance();
+        }
+        final String cookie=cookieManager.getCookie("https://3g.163.com/touch/");
+                if (cookie.contains("_antanalysis_s_id")&&
+                cookie.contains("NTES_OSESS")&&
+                cookie.contains("S_OINFO")&&
+                cookie.contains("P_OINFO"))
+        {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String rand="";
+                    try{
+                        for (int i=0;i<8;i++){
+                            Random rnd=new Random();
+                            rand+=String.valueOf(rnd.nextInt(10));
+                            Thread.sleep(1);
+                        }
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    final String infoJson=utils.sendGet("https://3g.163.com/touch/nc/api/jsonp/oauth/common/info.do?__rnd="+rand+"&callback=oauth_info",cookie);
+                    //oauth_info({"data":"不合法","code":403})
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String json=infoJson;
+                            if (json.contains("oauth_info(")){
+                                json=json.replace("oauth_info(","");
+                                json=json.substring(0,json.length()-1);
+                            }
+                            try{
+                                JSONObject jsonObject=new JSONObject(json);
+                                if (jsonObject.getInt("code")!=200){
+                                    Toast.makeText(getContext(),"获取用户信息失败:"+json,Toast.LENGTH_LONG).show();
+                                    exitAndClean();
+                                }else{
+                                    JSONObject data=jsonObject.getJSONObject("data");
+                                    Glide.with(getContext()).load(data.getString("photoUrl")).into(userImg);
+                                    username_tv.setText(data.getString("nickName"));
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }).start();
+        }
+
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {//ui线程
         super.onActivityResult(requestCode, resultCode, data);
@@ -146,17 +222,9 @@ public class fragment_me extends Fragment implements View.OnClickListener{
                     me_login.setVisibility(View.INVISIBLE);
                     Toast.makeText(getContext(),"登录成功",Toast.LENGTH_SHORT).show();
                     //获取用户信息并显示
+                    getUserInfo();
                 }
         }
-//        CookieManager cookieManager= CookieManager.getInstance();
-//        String cookie=cookieManager.getCookie("https://3g.163.com/touch/");
-//        if (cookie.contains("_antanalysis_s_id")&&
-//                cookie.contains("NTES_OSESS")&&
-//                cookie.contains("S_OINFO")&&
-//                cookie.contains("P_OINFO"))
-//        {
-//
-//        }
     }
 
     @Override
@@ -165,14 +233,7 @@ public class fragment_me extends Fragment implements View.OnClickListener{
         intent.setClass(getContext(),webLoginActivity.class);
         switch (v.getId()){
             case R.id.logout_btn:
-                //这里清除Cookie
-                cleanCookie();
-                SharedPreferences.Editor editor=getContext().getSharedPreferences("loginInfo", MODE_PRIVATE).edit();
-                editor.putBoolean("islogin",false);
-                editor.apply();
-                Toast.makeText(getContext(),"已退出",Toast.LENGTH_SHORT).show();
-                me_content.setVisibility(View.INVISIBLE);
-                me_login.setVisibility(View.VISIBLE);
+                exitAndClean();
                 break;
             case R.id.comment_btn:
 

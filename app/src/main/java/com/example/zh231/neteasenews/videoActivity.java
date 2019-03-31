@@ -12,7 +12,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 
-public class videoPlay extends AppCompatActivity {
+public class videoActivity extends AppCompatActivity {
 
     private String videoUrl;
     private VideoView videoView;

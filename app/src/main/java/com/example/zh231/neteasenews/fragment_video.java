@@ -37,15 +37,15 @@ public class fragment_video extends Fragment {
     //https://3g.163.com/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList
     private final String TAG = "fragment_video";
 
-    static int start=0;//逐层，
-    static int end=10;//一次性获取的视频条数 推荐10
+    private int start=0;//逐层，
+    private int end=10;//一次性获取的视频条数 推荐10
 
 
-    static fragment_video_adapter adapter;
-    static ListView listView;
-    static boolean isLoadingData=false;
+    private fragment_video_adapter adapter;
+    private ListView listView;
+    private boolean isLoadingData=false;
     private videoHandle handle;
-    final ListData listData=new ListData();
+    private final ListData listData=new ListData();
 
     class videoHandle extends Handler{
 
@@ -107,7 +107,7 @@ public class fragment_video extends Fragment {
                 if (listData.getVld()!=null){
 //                    Toast.makeText(getContext(),videoList.get(position).getMp4_url(),Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent();
-                    intent.setClass(getContext(),videoPlay.class);
+                    intent.setClass(getContext(),videoActivity.class);
                     intent.putExtra("url",listData.getVld().get(position).getMp4_url());
                     startActivity(intent);
                 }else{

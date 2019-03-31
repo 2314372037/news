@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".newsContent" />
-        <activity android:name=".videoPlay" />
+        <activity android:name=".newsActivity" />
+        <activity android:name=".videoActivity" />
 
         <meta-data
             android:name="com.google.android.actions"

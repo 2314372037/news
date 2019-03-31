@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 
 import java.lang.ref.WeakReference;
 
-public class newsContent extends AppCompatActivity {
+public class newsActivity extends AppCompatActivity {
 
     static RelativeLayout contentLayout;
 
@@ -52,14 +52,14 @@ public class newsContent extends AppCompatActivity {
         final String url = intent.getStringExtra("url");
         if (!url.isEmpty()){
             contentLayout = findViewById(R.id.newsContentLayout);
-            final newsContentHandle handle=new newsContentHandle(newsContent.this);
+            final newsContentHandle handle=new newsContentHandle(newsActivity.this);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String html=new utils(newsContent.this).sendGet(url,null);
+                    String html=new utils(newsActivity.this).sendGet(url,null);
                     String main="解析失败";
                     try{
-                        main=new utils(newsContent.this).parseHtml(html);
+                        main=new utils(newsActivity.this).parseHtml(html);
                     }catch (Throwable t){
                         t.printStackTrace();
                     }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment_home">
 
     <LinearLayout
@@ -52,7 +53,7 @@
         android:background="@color/newsListBackground"
         android:orientation="vertical">
 
-        <android:android.support.design.widget.TabLayout
+        <android.support.design.widget.TabLayout
             android:id="@+id/homeTopLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

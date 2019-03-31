@@ -116,15 +116,7 @@ public class fragment_me extends Fragment implements View.OnClickListener{
             getUserInfo();
         }
 
-        //setStatusBarColor();
         return view;
-    }
-
-    private void setStatusBarColor(){
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
-        }
     }
 
 

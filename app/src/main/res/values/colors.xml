@@ -7,6 +7,6 @@
     <color name="titleColor">#414141</color>
     <color name="titleSelectedColor">#de2626</color>
     <color name="newsTypeColor">#484848</color>
-    <color name="newsListBackground">#f1f1f1</color>
-    <color name="mainColor">#d71919</color>
+    <color name="newsListBackground">@android:color/background_light</color>
+    <color name="mainColor">@android:color/holo_red_light</color>
 </resources>

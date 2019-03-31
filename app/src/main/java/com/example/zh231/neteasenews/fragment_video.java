@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zh231.neteasenews.adapter.fragment_video_adapter;
+import com.example.zh231.neteasenews.jsonParse.ListData;
 import com.example.zh231.neteasenews.jsonParse.homeListData;
 import com.example.zh231.neteasenews.jsonParse.videoListData;
 
@@ -44,10 +45,9 @@ public class fragment_video extends Fragment {
     static ListView listView;
     static boolean isLoadingData=false;
     private videoHandle handle;
+    final ListData listData=new ListData();
 
-    static ArrayList<videoListData> hdl=null;
-
-    static class videoHandle extends Handler{
+    class videoHandle extends Handler{
 
         private final WeakReference<Context> context;
 
@@ -66,15 +66,15 @@ public class fragment_video extends Fragment {
             switch (msg.what){
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
-                    hdl = new utils(context).parseJson_video(String.valueOf(msg.obj));
-                    adapter=new fragment_video_adapter(context,hdl);
+                    listData.setVld(new utils(context).parseJson_video(String.valueOf(msg.obj)));
+                    adapter=new fragment_video_adapter(context,listData.getVld());
                     listView.setAdapter(adapter);
                     break;
                 case 1:
                     Log.d("继续加载数据完成",String.valueOf(msg.obj));
                     if (!String.valueOf(msg.obj).equals("")){
                         ArrayList<videoListData> tempList= new utils(context).parseJson_video(String.valueOf(msg.obj));
-                        hdl.addAll(tempList);
+                        listData.getVld().addAll(tempList);
                         adapter.notifyDataSetChanged();
                     }else{
                         Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
@@ -82,13 +82,6 @@ public class fragment_video extends Fragment {
                     break;
             }
             isLoadingData=false;
-        }
-    }
-
-    private void setStatusBarColor(){
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getActivity().getWindow().setStatusBarColor(Color.WHITE);
         }
     }
 
@@ -106,18 +99,16 @@ public class fragment_video extends Fragment {
 
         listView=view.findViewById(R.id.videoListView);
 
-        //setStatusBarColor();
-
         loadingData(0);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (hdl!=null){
+                if (listData.getVld()!=null){
 //                    Toast.makeText(getContext(),videoList.get(position).getMp4_url(),Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent();
                     intent.setClass(getContext(),videoPlay.class);
-                    intent.putExtra("url",hdl.get(position).getMp4_url());
+                    intent.putExtra("url",listData.getVld().get(position).getMp4_url());
                     startActivity(intent);
                 }else{
                     Toast.makeText(getContext(),"数据加载中",Toast.LENGTH_SHORT).show();
@@ -151,7 +142,7 @@ public class fragment_video extends Fragment {
         return view;
     }
 
-    private void loadingData(final int what){
+    private void loadingData(final int what){//视频加载需要cookie,否则无法加载出数据
         final videoHandle handle=this.handle;
         isLoadingData=true;
         new Thread(new Runnable() {

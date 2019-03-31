@@ -2,9 +2,6 @@ package com.example.zh231.neteasenews;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,13 +17,13 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.example.zh231.neteasenews.adapter.fragment_home_adapter;
 import com.example.zh231.neteasenews.customView.typeView;
+import com.example.zh231.neteasenews.jsonParse.ListData;
 import com.example.zh231.neteasenews.jsonParse.homeListData;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -45,16 +42,16 @@ public class fragment_home extends Fragment {
 
 
     static boolean isLoadingData=false;//是否在加载数据
-    LinearLayout homeTopView=null;
+    android.support.design.widget.TabLayout homeTopLayout=null;
     static ListView listView;
     static fragment_home_adapter adapter;
     private homeHandle handle;
-    static ArrayList<homeListData> hdl=null;
+    final ListData listData=new ListData();
 
     Button search_Btn=null;
 
 
-    static class homeHandle extends Handler{
+    class homeHandle extends Handler{
 
         private final WeakReference<Context> context;
 
@@ -73,14 +70,14 @@ public class fragment_home extends Fragment {
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
                     new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                    hdl = new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
-                    adapter=new fragment_home_adapter<homeListData>(context,hdl);
+                    listData.setHld(new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType));
+                    adapter=new fragment_home_adapter<homeListData>(context,listData.getHld());
                     listView.setAdapter(adapter);
                     break;
                 case 1:
                     Log.d("加载本地数据完成",String.valueOf(msg.obj));
-                    hdl = new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
-                    adapter=new fragment_home_adapter<homeListData>(context,hdl);
+                    listData.setHld(new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType));
+                    adapter=new fragment_home_adapter<homeListData>(context,listData.getHld());
                     listView.setAdapter(adapter);
                     break;
                 case 2:
@@ -88,7 +85,7 @@ public class fragment_home extends Fragment {
                     if (!String.valueOf(msg.obj).equals("")){
                         new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
                         ArrayList<homeListData> tempList= new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
-                        hdl.addAll(tempList);
+                        listData.getHld().addAll(tempList);
                         adapter.notifyDataSetChanged();
                     }else{
                         Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
@@ -99,31 +96,22 @@ public class fragment_home extends Fragment {
         }
     }
 
-    private void setStatusBarColor(){
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.mainColor));
-        }
-    }
-
     /**
      * 初始化相关
      */
     public void initData(){
 
-        //setStatusBarColor();
-
         String newsType[]={"新闻","娱乐","体育","财经","军事","科技","手机","数码","时尚","游戏","教育","健康","旅游"};
-        for (String temp:newsType){
-            RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
-            typeView tv=new typeView(getContext(),newsType);
-
-            homeTopView.addView(tv);
-        }
+//        for (String temp:newsType){
+//            RelativeLayout.LayoutParams layoutParams=new RelativeLayout.LayoutParams(
+//                    RelativeLayout.LayoutParams.MATCH_PARENT,
+//                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+//            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//
+//            typeView tv=new typeView(getContext(),newsType);
+//
+//            homeTopView.addView(tv);
+//        }
 
         String con=new utils(getContext()).readFile(utils.fileName);//尝试读取本地文件
         if (con==null||con==""||con.isEmpty()){
@@ -146,7 +134,7 @@ public class fragment_home extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_fragment_home, container, false);
 
-        homeTopView = view.findViewById(R.id.homeTopView);//重构
+        homeTopLayout = view.findViewById(R.id.homeTopLayout);
 
         listView = view.findViewById(R.id.newsListView);
 
@@ -166,31 +154,26 @@ public class fragment_home extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),"url:"+hdl.get(position-1).geturl(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"url:"+listData.getHld().get(position-1).geturl(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(),newsContent.class);
-                intent.putExtra("url",hdl.get(position-1).geturl());
+                intent.putExtra("url",listData.getHld().get(position-1).geturl());
                 startActivity(intent);
             }
         });
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {//滚动到底部自动加载
-            boolean ssc=false;
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                ssc=true;
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (ssc){
-                    if (firstVisibleItem+visibleItemCount==totalItemCount){
-                        if (!isLoadingData){
-                            //修改start and end，实现向后加载
-                            start=start+end; //接着最后一条新闻获取 例如： 第一次0-20，第二次20-20，第三次40-20
-                            loadingData(2);
-                        }
+                if (firstVisibleItem + visibleItemCount == totalItemCount) {
+                    if (!isLoadingData) {
+                        //修改start and end，实现向后加载
+                        start = start + end; //接着最后一条新闻获取 例如： 第一次0-20，第二次20-20，第三次40-20
+                        loadingData(2);
                     }
-                    ssc=false;
                 }
             }
         });

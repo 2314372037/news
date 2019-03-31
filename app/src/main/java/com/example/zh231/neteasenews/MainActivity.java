@@ -1,11 +1,13 @@
 package com.example.zh231.neteasenews;
 
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -13,6 +15,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_home;
     private TextView tv_video;
     private TextView tv_me;
+    private RelativeLayout mainRootLayout;
 
     private fragment_home fh;
     private fragment_video fv;
@@ -30,6 +33,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initViewData();
     }
 
+    private void setStatusBarColor(int colorId){
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            //注意要清除 FLAG_TRANSLUCENT_STATUS flag
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().setStatusBarColor(getResources().getColor(colorId));
+        }
+    }
+
+    protected void setDarkStatusIcon(boolean dark) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decorView = getWindow().getDecorView();
+            if (decorView == null) return;
+            int vis = decorView.getSystemUiVisibility();
+            if (dark) {
+                vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            }
+            decorView.setSystemUiVisibility(vis);
+        }
+    }
+
     /**
      * 初始化View
      */
@@ -37,12 +63,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_home=(TextView)findViewById(R.id.text_home);
         tv_video=(TextView)findViewById(R.id.text_video);
         tv_me=(TextView)findViewById(R.id.text_me);
+        mainRootLayout=(RelativeLayout) findViewById(R.id.mainRootLayout);
     }
 
     /**
      * 初始化View数据
      */
     private void initViewData(){
+
+        setStatusBarColor(android.R.color.holo_red_light);
 
         tv_home.setOnClickListener(this);
         tv_video.setOnClickListener(this);
@@ -96,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     fragmentTransaction.show(fh);
                 }
-
+                setStatusBarColor(android.R.color.holo_red_light);
+                setDarkStatusIcon(false);
                 break;
 
 
@@ -110,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     fragmentTransaction.show(fv);
                 }
+                setStatusBarColor(android.R.color.background_light);
+                setDarkStatusIcon(true);
                 break;
 
 
@@ -123,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }else{
                     fragmentTransaction.show(fm);
                 }
+                setStatusBarColor(android.R.color.background_light);
+                setDarkStatusIcon(true);
                 break;
 
 

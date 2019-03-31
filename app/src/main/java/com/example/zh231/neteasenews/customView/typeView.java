@@ -4,11 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 public class typeView extends View {
 
@@ -26,12 +25,11 @@ public class typeView extends View {
         super(context, attrs);
         this.title=title;
         paint=new Paint();
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.RED);
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setTextSize(40);
-
-        rect=new Rect(0,0,1080,70);
+        rect=new Rect();
 
     }
 
@@ -47,10 +45,12 @@ public class typeView extends View {
 
     }
 
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        rect.set(0,0,100,70);
+
+
 
         canvas.drawRect(rect,paint);
 

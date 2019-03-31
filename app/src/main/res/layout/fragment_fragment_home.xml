@@ -9,7 +9,7 @@
         android:id="@+id/statusBar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/mainColor"
+        android:background="@android:color/holo_red_light"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -31,14 +31,15 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="135px"
                 android:layout_marginRight="125px"
+                android:alpha="0.7"
                 android:background="@drawable/edittextbtn_layout" />
 
             <ImageView
                 android:layout_width="105px"
                 android:layout_height="72px"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_margin="8dp"
+                android:layout_marginEnd="1dp"
                 android:src="@mipmap/skin1_news_main_live_icon" />
 
         </RelativeLayout>
@@ -51,12 +52,11 @@
         android:background="@color/newsListBackground"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/homeTopView"
+        <android:android.support.design.widget.TabLayout
+            android:id="@+id/homeTopLayout"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
 
         <com.example.zh231.neteasenews.customView.homeListView
             android:id="@+id/newsListView"

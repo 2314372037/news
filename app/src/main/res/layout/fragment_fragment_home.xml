@@ -70,21 +70,11 @@
         </android.support.design.widget.AppBarLayout>
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPagerLayout"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </android.support.v4.view.ViewPager>
-
-        <com.example.zh231.neteasenews.customView.homeListView
-            android:id="@+id/newsListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
-
-        </com.example.zh231.neteasenews.customView.homeListView>
-
 
     </LinearLayout>
 

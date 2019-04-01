@@ -139,7 +139,9 @@ public class fragment_video extends Fragment {
             @Override
             public void run() {
                 String content="";
-                String cookie="";
+                String cookie="_ntes_nnid=310a20ee31152c4c600f16d7b830b8f6,1553941006768; _ntes_nuid=310a20ee31152c4c600f16d7b830b8f6; _antanalysis_s_id=1553941008445;" +
+                        " NTES_OSESS=iJSeI9DVqrBIT5Wlf0xTF8LHK5WfJVdd0gGxe24DCEULAAZ2MKT0DBwWuXgQhQ0m8q9v.ek7KBFFMfdC9pCbSkadD4JLKjQdiTg4drLL3316S81vpX4PVMhwG3xHolfVXcwwkcNDqNVlt0fXeESw7WxF.yylMBhrl1_my_y.JhIAO83eitkW6LPY6n3JlACbX;" +
+                        " S_OINFO=1553941081|0|##|5976931763@sina.163.com; P_OINFO=5976931763@sina.163.com|1553941081|0|3g_163|00&99|null#0|null|3g_163|5976931763@sina.163.com";
                 switch (what){
                     case 0://在线加载
                         content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd,cookie);

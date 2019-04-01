@@ -8,7 +8,8 @@
 
 2019/4/1
 
-![image](/screenshots/dump_4392980716357105148.png){:width="800px" height="1280px"}
+<img src="/screenshots/dump_4392980716357105148.png" width="370"/>
+#![image](/screenshots/dump_4392980716357105148.png)
 
 ![image](/screenshots/dump_5745355037237217558.png)
 

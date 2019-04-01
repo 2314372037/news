@@ -1,6 +1,4 @@
-package com.example.zh231.neteasenews.jsonParse;
-
-import java.util.List;
+package com.example.zh231.neteasenews.bean;
 
 public class videoListData {
 

@@ -1,4 +1,4 @@
-package com.example.zh231.neteasenews.jsonParse;
+package com.example.zh231.neteasenews.bean;
 
 import java.util.ArrayList;
 

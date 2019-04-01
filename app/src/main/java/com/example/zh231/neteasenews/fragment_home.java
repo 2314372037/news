@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -16,16 +14,14 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.support.design.widget.TabLayout;
 
 import com.example.zh231.neteasenews.adapter.fragment_home_adapter;
 import com.example.zh231.neteasenews.adapter.viewPagerAdapter;
 import com.example.zh231.neteasenews.customView.homeListView;
-import com.example.zh231.neteasenews.jsonParse.ListData;
-import com.example.zh231.neteasenews.jsonParse.homeListData;
+import com.example.zh231.neteasenews.bean.ListData;
+import com.example.zh231.neteasenews.bean.homeListData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -120,17 +116,13 @@ public class fragment_home extends Fragment {
 
         String titles[]={"新闻","娱乐","体育","财经","军事","科技","手机","数码","时尚","游戏","教育","健康","旅游"};
 
-        for (String title:titles){
-            homeTopLayout.addTab(homeTopLayout.newTab().setText(title));
+        ArrayList<Fragment> list=new ArrayList<>();
+        for (int i=0;i<titles.length;i++){
+            list.add(new fragment_me());
         }
 
-//        ArrayList<Fragment> list=new ArrayList<>();
-//        for (int i=0;i<titles.length;i++){
-//            list.add();
-//        }
-//
-//        viewPagerLayout.setAdapter(new viewPagerAdapter(getFragmentManager(),list));
-//        homeTopLayout.setupWithViewPager(viewPagerLayout);
+        viewPagerLayout.setAdapter(new viewPagerAdapter(getFragmentManager(),list,titles));
+        homeTopLayout.setupWithViewPager(viewPagerLayout);
 
         String con=new utils(getContext()).readFile(utils.fileName);//尝试读取本地文件
         if (con==null||con==""||con.isEmpty()){

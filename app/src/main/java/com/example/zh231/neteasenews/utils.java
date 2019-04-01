@@ -4,11 +4,10 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.webkit.WebView;
 import android.widget.TextView;
 
-import com.example.zh231.neteasenews.jsonParse.homeListData;
-import com.example.zh231.neteasenews.jsonParse.videoListData;
+import com.example.zh231.neteasenews.bean.homeListData;
+import com.example.zh231.neteasenews.bean.videoListData;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

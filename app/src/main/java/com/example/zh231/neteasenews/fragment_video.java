@@ -2,35 +2,25 @@ package com.example.zh231.neteasenews;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zh231.neteasenews.adapter.fragment_video_adapter;
-import com.example.zh231.neteasenews.jsonParse.ListData;
-import com.example.zh231.neteasenews.jsonParse.homeListData;
-import com.example.zh231.neteasenews.jsonParse.videoListData;
+import com.example.zh231.neteasenews.bean.ListData;
+import com.example.zh231.neteasenews.bean.videoListData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-
-import static com.example.zh231.neteasenews.utils.fixJson;
 
 public class fragment_video extends Fragment {
 

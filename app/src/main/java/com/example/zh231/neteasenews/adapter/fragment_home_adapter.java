@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.zh231.neteasenews.R;
-import com.example.zh231.neteasenews.jsonParse.homeListData;
+import com.example.zh231.neteasenews.bean.homeListData;
 
 import java.util.ArrayList;
 

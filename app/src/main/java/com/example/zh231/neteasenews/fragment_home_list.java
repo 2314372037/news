@@ -69,6 +69,12 @@ public class fragment_home_list extends Fragment {
                         content=utils.fixJson(content);
                         Log.d(TAG,"继续加载数据"+content);
                         break;
+                    case 3://刷新
+                        start=0;end=20;
+                        content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html",null);
+                        content=utils.fixJson(content);
+                        Log.d(TAG,"刷新数据"+content);
+                        break;
                 }
                 Message message=new Message();
                 message.what=what;
@@ -123,6 +129,14 @@ public class fragment_home_list extends Fragment {
             }
         });
 
+        listView.setOnRefreshing(new homeListView.OnRefreshing() {
+            @Override
+            public void refresh() {
+                //刷新操作
+                loadingData(3);
+            }
+        });
+
         return view;
     }
 
@@ -162,6 +176,25 @@ public class fragment_home_list extends Fragment {
                         ArrayList<homeListData> tempList= new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
                         listData.getHld().addAll(tempList);
                         adapter.notifyDataSetChanged();
+                    }else{
+                        Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case 3:
+                    Log.d("刷新数据完成",String.valueOf(msg.obj));
+                    if (!String.valueOf(msg.obj).equals("")){
+                        //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
+                        ArrayList<homeListData> tempList= new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                        listData.getHld().clear();
+                        listData.getHld().addAll(tempList);
+                        adapter.notifyDataSetChanged();
+                        listView.finishRefresh();
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(context,"刷新完成",Toast.LENGTH_LONG).show();
                     }else{
                         Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
                     }

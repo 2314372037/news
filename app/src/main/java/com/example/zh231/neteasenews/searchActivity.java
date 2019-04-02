@@ -1,8 +1,10 @@
 package com.example.zh231.neteasenews;
 
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -29,6 +31,32 @@ public class searchActivity extends AppCompatActivity implements View.OnClickLis
         search_startBtn.setOnClickListener(this);
         search_backBtn.setOnClickListener(this);
 
+    }
+
+    protected void setDarkStatusIcon(boolean dark) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decorView = getWindow().getDecorView();
+            if (decorView == null) return;
+            int vis = decorView.getSystemUiVisibility();
+            if (dark) {
+                vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            } else {
+                vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            }
+            decorView.setSystemUiVisibility(vis);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setDarkStatusIcon(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        setDarkStatusIcon(false);
+        super.onDestroy();
     }
 
     @Override

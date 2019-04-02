@@ -8,14 +8,14 @@
 
 2019/4/1
 
-![image](/screenshots/dump_4392980716357105148.png){:width="800px" height="1280px"}
+<img src="/screenshots/dump_4392980716357105148.png" width="480"/>
 
-![image](/screenshots/dump_5745355037237217558.png)
+<img src="/screenshots/dump_5745355037237217558.png" width="480"/>
 
-![image](/screenshots/dump_2003808965248586856.png)
+<img src="/screenshots/dump_2003808965248586856.png" width="480"/>
 
-![image](/screenshots/dump_2627261351857894906.png)
+<img src="/screenshots/dump_2627261351857894906.png" width="480"/>
 
-![image](/screenshots/dump_2419747356412872658.png)
+<img src="/screenshots/dump_2419747356412872658.png" width="480"/>
 
-![image](/screenshots/dump_4728276237277429568.png)
+<img src="/screenshots/dump_4728276237277429568.png" width="480"/>

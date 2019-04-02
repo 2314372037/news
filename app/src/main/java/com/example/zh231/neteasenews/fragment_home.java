@@ -1,29 +1,15 @@
 package com.example.zh231.neteasenews;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Toast;
-import android.support.design.widget.TabLayout;
-
-import com.example.zh231.neteasenews.adapter.fragment_home_adapter;
 import com.example.zh231.neteasenews.adapter.viewPagerAdapter;
-import com.example.zh231.neteasenews.customView.homeListView;
-import com.example.zh231.neteasenews.bean.ListData;
-import com.example.zh231.neteasenews.bean.homeListData;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
@@ -48,8 +34,6 @@ public class fragment_home extends Fragment {
         homeTopLayout = view.findViewById(R.id.homeTopLayout);
 
         viewPagerLayout = view.findViewById(R.id.viewPagerLayout);
-
-        //listView = (homeListView)view.findViewById(R.id.newsListView);
 
         search_Btn = view.findViewById(R.id.search_Btn);
 
@@ -85,11 +69,5 @@ public class fragment_home extends Fragment {
 
         viewPagerLayout.setAdapter(new viewPagerAdapter(getFragmentManager(),list,titles));
         homeTopLayout.setupWithViewPager(viewPagerLayout);
-
-
     }
-
-
-
-
 }

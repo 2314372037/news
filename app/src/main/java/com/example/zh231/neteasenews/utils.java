@@ -46,6 +46,8 @@ public class utils {
 
     static final String user_agent="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.66 Safari/537.36";
 
+    static final int activity_gone=9;//表示handler不存在activity或fragment引用
+
 
     public enum newsTypeCode{
         BBM54PGAwangning,//新闻

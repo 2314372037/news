@@ -1,9 +1,7 @@
 package com.example.zh231.neteasenews;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,13 +13,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Toast;
-
 import com.example.zh231.neteasenews.adapter.fragment_home_adapter;
 import com.example.zh231.neteasenews.bean.ListData;
 import com.example.zh231.neteasenews.bean.homeListData;
 import com.example.zh231.neteasenews.customView.homeListView;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class fragment_home_list extends Fragment {
@@ -37,18 +32,16 @@ public class fragment_home_list extends Fragment {
     private boolean isLoadingData=false;//是否在加载数据
     private homeListView listView;
     private fragment_home_adapter adapter;
-    private homeHandle handle;
     private final ListData listData=new ListData();
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        handle = new homeHandle(this.getContext());
     }
 
     private void loadingData(final int what){
-        final homeHandle handler=handle;
+        final homeHandle handler=new homeHandle(fragment_home_list.this);
         isLoadingData=true;
         new Thread(new Runnable() {
             @Override
@@ -140,51 +133,44 @@ public class fragment_home_list extends Fragment {
         return view;
     }
 
-    class homeHandle extends Handler {
+    private class homeHandle extends baseHandler{
 
-        private final WeakReference<Context> context;
-
-        public homeHandle(Context context){
-            this.context=new WeakReference<Context>(context);
+        public homeHandle(Fragment fragment) {
+            super(fragment);
         }
 
         @Override
-        public void handleMessage(Message msg) {
-            Context context=this.context.get();
-            if (context==null){
-                super.handleMessage(msg);
-                return;
-            }
+        public void handleMessage(Message msg, int what) {
             switch (msg.what){
                 case 0:
                     Log.d("加载在线数据完成",String.valueOf(msg.obj));
                     //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                    listData.setHld(new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType));
-                    adapter=new fragment_home_adapter<homeListData>(context,listData.getHld());
+                    listData.setHld(new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType));
+                    adapter=new fragment_home_adapter<homeListData>(getContext(),listData.getHld());
                     listView.setAdapter(adapter);
                     break;
                 case 1:
                     Log.d("加载本地数据完成",String.valueOf(msg.obj));
-                    listData.setHld(new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType));
-                    adapter=new fragment_home_adapter<homeListData>(context,listData.getHld());
+                    listData.setHld(new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType));
+                    adapter=new fragment_home_adapter<homeListData>(getContext(),listData.getHld());
                     listView.setAdapter(adapter);
                     break;
                 case 2:
                     Log.d("继续加载数据完成",String.valueOf(msg.obj));
                     if (!String.valueOf(msg.obj).equals("")){
                         //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                        ArrayList<homeListData> tempList= new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                        ArrayList<homeListData> tempList= new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType);
                         listData.getHld().addAll(tempList);
                         adapter.notifyDataSetChanged();
                     }else{
-                        Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"网络故障",Toast.LENGTH_LONG).show();
                     }
                     break;
                 case 3:
                     Log.d("刷新数据完成",String.valueOf(msg.obj));
                     if (!String.valueOf(msg.obj).equals("")){
                         //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                        ArrayList<homeListData> tempList= new utils(context).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                        ArrayList<homeListData> tempList= new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType);
                         listData.getHld().clear();
                         listData.getHld().addAll(tempList);
                         adapter.notifyDataSetChanged();
@@ -194,13 +180,13 @@ public class fragment_home_list extends Fragment {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(context,"刷新完成",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"刷新完成",Toast.LENGTH_LONG).show();
                     }else{
-                        Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"网络故障",Toast.LENGTH_LONG).show();
                     }
                     break;
-            }
-            isLoadingData=false;
         }
+            isLoadingData=false;
+    }
     }
 }

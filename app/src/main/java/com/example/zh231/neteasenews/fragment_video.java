@@ -1,9 +1,7 @@
 package com.example.zh231.neteasenews;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,60 +12,47 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.example.zh231.neteasenews.adapter.fragment_video_adapter;
 import com.example.zh231.neteasenews.bean.ListData;
 import com.example.zh231.neteasenews.bean.videoListData;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class fragment_video extends Fragment {
 
-    //https://3g.163.com/touch/nc/api/video/recommend/Video_Recom/0-10.do?callback=videoList
     private final String TAG = "fragment_video";
 
     private int start=0;//逐层，
     private int end=10;//一次性获取的视频条数 推荐10
 
-
     private fragment_video_adapter adapter;
     private ListView listView;
     private boolean isLoadingData=false;
-    private videoHandle handle;
     private final ListData listData=new ListData();
 
-    class videoHandle extends Handler{
 
-        private final WeakReference<Context> context;
+    private class videoHandle extends baseHandler{
 
-        public videoHandle(Context context) {
-            super();
-            this.context=new WeakReference<Context>(context);
+        public videoHandle(Fragment fragment) {
+            super(fragment);
         }
 
         @Override
-        public void handleMessage(Message msg) {
-            Context context=this.context.get();
-            if (context==null){
-                super.handleMessage(msg);
-                return ;
-            }
+        public void handleMessage(Message msg, int what) {
             switch (msg.what){
                 case 0:
-                    Log.d("加载在线数据完成",String.valueOf(msg.obj));
-                    listData.setVld(new utils(context).parseJson_video(String.valueOf(msg.obj)));
-                    adapter=new fragment_video_adapter(context,listData.getVld());
+                    Log.d("加载在线数据完成", String.valueOf(msg.obj));
+                    listData.setVld(new utils(getContext()).parseJson_video(String.valueOf(msg.obj)));
+                    adapter = new fragment_video_adapter<videoListData>(getContext(), listData.getVld());
                     listView.setAdapter(adapter);
                     break;
                 case 1:
-                    Log.d("继续加载数据完成",String.valueOf(msg.obj));
-                    if (!String.valueOf(msg.obj).equals("")){
-                        ArrayList<videoListData> tempList= new utils(context).parseJson_video(String.valueOf(msg.obj));
+                    Log.d("继续加载数据完成", String.valueOf(msg.obj));
+                    if (!String.valueOf(msg.obj).equals("")) {
+                        ArrayList<videoListData> tempList = new utils(getContext()).parseJson_video(String.valueOf(msg.obj));
                         listData.getVld().addAll(tempList);
                         adapter.notifyDataSetChanged();
-                    }else{
-                        Toast.makeText(context,"网络故障",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
                     }
                     break;
             }
@@ -83,8 +68,6 @@ public class fragment_video extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        handle=new videoHandle(getContext());
-
         View view=inflater.inflate(R.layout.fragment_fragment_video,container,false);
 
         listView=view.findViewById(R.id.videoListView);
@@ -95,7 +78,6 @@ public class fragment_video extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (listData.getVld()!=null){
-//                    Toast.makeText(getContext(),videoList.get(position).getMp4_url(),Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent();
                     intent.setClass(getContext(),videoActivity.class);
                     intent.putExtra("url",listData.getVld().get(position).getMp4_url());
@@ -103,7 +85,6 @@ public class fragment_video extends Fragment {
                 }else{
                     Toast.makeText(getContext(),"数据加载中",Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -127,18 +108,18 @@ public class fragment_video extends Fragment {
                 }
             }
         });
-
-
         return view;
     }
 
     private void loadingData(final int what){//视频加载需要cookie,否则无法加载出数据
-        final videoHandle handle=this.handle;
+        final videoHandle handle=new videoHandle(fragment_video.this);
         isLoadingData=true;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 String content="";
+
+                //别干坏事--
                 String cookie="_ntes_nnid=310a20ee31152c4c600f16d7b830b8f6,1553941006768; _ntes_nuid=310a20ee31152c4c600f16d7b830b8f6; _antanalysis_s_id=1553941008445;" +
                         " NTES_OSESS=iJSeI9DVqrBIT5Wlf0xTF8LHK5WfJVdd0gGxe24DCEULAAZ2MKT0DBwWuXgQhQ0m8q9v.ek7KBFFMfdC9pCbSkadD4JLKjQdiTg4drLL3316S81vpX4PVMhwG3xHolfVXcwwkcNDqNVlt0fXeESw7WxF.yylMBhrl1_my_y.JhIAO83eitkW6LPY6n3JlACbX;" +
                         " S_OINFO=1553941081|0|##|5976931763@sina.163.com; P_OINFO=5976931763@sina.163.com|1553941081|0|3g_163|00&99|null#0|null|3g_163|5976931763@sina.163.com";

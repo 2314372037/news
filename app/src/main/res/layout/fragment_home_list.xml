@@ -2,9 +2,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.example.zh231.neteasenews.customView.homeListView
-        android:id="@+id/newsListView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.example.zh231.neteasenews.customView.homeListView>
+        <com.example.zh231.neteasenews.customView.homeListView
+            android:id="@+id/newsListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.example.zh231.neteasenews.customView.homeListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </FrameLayout>

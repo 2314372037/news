@@ -1,5 +1,6 @@
 package com.example.zh231.neteasenews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -18,32 +19,24 @@ import java.lang.ref.WeakReference;
 
 public class newsActivity extends AppCompatActivity {
 
-    static RelativeLayout contentLayout;
+    private RelativeLayout contentLayout;
 
-    static class newsContentHandle extends Handler{
-        final WeakReference<Context> context;
+    private class handler extends baseHandler{
 
-        public newsContentHandle(Context context) {
-            this.context=new WeakReference<Context>(context);
+        public handler(Activity activity) {
+            super(activity);
         }
 
         @Override
-        public void handleMessage(Message msg) {
-            Context context=this.context.get();
-            if (context==null){
-                super.handleMessage(msg);
-                return;
-            }
+        public void handleMessage(Message msg, int what) {
             switch (msg.what){
                 case 0:
-                    WebView webView = new WebView(context);
+                    WebView webView = new WebView(getApplicationContext());
                     webView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                     webView.loadData(String.valueOf(msg.obj),"text/html","utf-8");
                     contentLayout.addView(webView);
                     break;
             }
-
-
         }
     }
 
@@ -77,24 +70,24 @@ public class newsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_content);
+
         Intent intent=getIntent();
         final String url = intent.getStringExtra("url");
-        if (!url.isEmpty()){
+
+        if (url!=null||!url.isEmpty()){
             contentLayout = findViewById(R.id.newsContentLayout);
-            final newsContentHandle handle=new newsContentHandle(newsActivity.this);
+
+            final handler handle=new handler(newsActivity.this);
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String html=new utils(newsActivity.this).sendGet(url,null);
-                    String main="解析失败";
-                    try{
-                        main=new utils(newsActivity.this).parseHtml(html);
-                    }catch (Throwable t){
-                        t.printStackTrace();
-                    }
+                    String html=utils.sendGet(url,null);
+                    //html=new utils(newsActivity.this).parseHtml(html);
+
                     Message message=new Message();
                     message.what=0;
-                    message.obj=main;
+                    message.obj=html;
                     handle.sendMessage(message);
                 }
             }).start();

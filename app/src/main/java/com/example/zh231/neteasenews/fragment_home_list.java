@@ -6,6 +6,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ public class fragment_home_list extends Fragment {
 
     private boolean isLoadingData=false;//是否在加载数据
     private homeListView listView;
+    private SwipeRefreshLayout swipeRefLayout;
     private fragment_home_adapter adapter;
     private final ListData listData=new ListData();
 
@@ -66,6 +68,11 @@ public class fragment_home_list extends Fragment {
                         start=0;end=20;
                         content = utils.sendGet(utils.hostUrl163+utils.UrlBody+currentNewsType+"/"+start+"-"+end+".html",null);
                         content=utils.fixJson(content);
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         Log.d(TAG,"刷新数据"+content);
                         break;
                 }
@@ -84,6 +91,16 @@ public class fragment_home_list extends Fragment {
 
         listView = view.findViewById(R.id.newsListView);
 
+        swipeRefLayout = view.findViewById(R.id.swipeRefLayout);
+        swipeRefLayout.setColorSchemeResources(R.color.mainColor);
+        swipeRefLayout.setProgressViewOffset(false,0,50);
+        swipeRefLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadingData(3);
+            }
+        });
+
         currentNewsType=getArguments().getString(args1Key);
 
         String con=new utils(getContext()).readFile(utils.fileName);//尝试读取本地文件
@@ -98,9 +115,9 @@ public class fragment_home_list extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(),"url:"+listData.getHld().get(position-1).geturl(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"url:"+listData.getHld().get(position).geturl(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(),newsActivity.class);
-                intent.putExtra("url",listData.getHld().get(position-1).geturl());
+                intent.putExtra("url",listData.getHld().get(position).geturl());
                 startActivity(intent);
             }
         });
@@ -119,14 +136,6 @@ public class fragment_home_list extends Fragment {
                         loadingData(2);
                     }
                 }
-            }
-        });
-
-        listView.setOnRefreshing(new homeListView.OnRefreshing() {
-            @Override
-            public void refresh() {
-                //刷新操作
-                loadingData(3);
             }
         });
 
@@ -174,12 +183,7 @@ public class fragment_home_list extends Fragment {
                         listData.getHld().clear();
                         listData.getHld().addAll(tempList);
                         adapter.notifyDataSetChanged();
-                        listView.finishRefresh();
-                        try {
-                            Thread.sleep(1500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        swipeRefLayout.setRefreshing(false);
                         Toast.makeText(getContext(),"刷新完成",Toast.LENGTH_LONG).show();
                     }else{
                         Toast.makeText(getContext(),"网络故障",Toast.LENGTH_LONG).show();

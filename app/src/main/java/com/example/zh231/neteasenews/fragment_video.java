@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,39 +27,10 @@ public class fragment_video extends Fragment {
 
     private fragment_video_adapter adapter;
     private ListView listView;
+    private SwipeRefreshLayout swipeRefLayoutForVideo;
     private boolean isLoadingData=false;
     private final ListData listData=new ListData();
 
-
-    private class videoHandle extends baseHandler{
-
-        public videoHandle(Fragment fragment) {
-            super(fragment);
-        }
-
-        @Override
-        public void handleMessage(Message msg, int what) {
-            switch (msg.what){
-                case 0:
-                    Log.d("加载在线数据完成", String.valueOf(msg.obj));
-                    listData.setVld(new utils(getContext()).parseJson_video(String.valueOf(msg.obj)));
-                    adapter = new fragment_video_adapter<videoListData>(getContext(), listData.getVld());
-                    listView.setAdapter(adapter);
-                    break;
-                case 1:
-                    Log.d("继续加载数据完成", String.valueOf(msg.obj));
-                    if (!String.valueOf(msg.obj).equals("")) {
-                        ArrayList<videoListData> tempList = new utils(getContext()).parseJson_video(String.valueOf(msg.obj));
-                        listData.getVld().addAll(tempList);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
-                    }
-                    break;
-            }
-            isLoadingData=false;
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +43,16 @@ public class fragment_video extends Fragment {
         View view=inflater.inflate(R.layout.fragment_fragment_video,container,false);
 
         listView=view.findViewById(R.id.videoListView);
+
+        swipeRefLayoutForVideo=view.findViewById(R.id.swipeRefLayoutForVideo);
+        swipeRefLayoutForVideo.setColorSchemeResources(R.color.mainColor);
+        swipeRefLayoutForVideo.setProgressViewOffset(false,0,50);
+        swipeRefLayoutForVideo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadingData(2);
+            }
+        });
 
         loadingData(0);
 
@@ -134,6 +116,12 @@ public class fragment_video extends Fragment {
                         content=utils.fixJson(content);
                         Log.d(TAG,"继续加载数据"+content);
                         break;
+                    case 2:
+                        start=0;end=20;
+                        content = utils.sendGet(utils.hostUrl163+utils.videoUrlBody+start+"-"+end+utils.videoUrlEnd,cookie);
+                        content=utils.fixJson(content);
+                        Log.d(TAG,"刷新数据"+content);
+                        break;
                 }
                 Message message=new Message();
                 message.what=what;
@@ -143,4 +131,47 @@ public class fragment_video extends Fragment {
         }).start();
 
     }
+
+    private class videoHandle extends baseHandler{
+
+        public videoHandle(Fragment fragment) {
+            super(fragment);
+        }
+
+        @Override
+        public void handleMessage(Message msg, int what) {
+            switch (msg.what){
+                case 0:
+                    //Log.d("加载在线数据完成", String.valueOf(msg.obj));
+                    listData.setVld(new utils(getContext()).parseJson_video(String.valueOf(msg.obj)));
+                    adapter = new fragment_video_adapter<videoListData>(getContext(), listData.getVld());
+                    listView.setAdapter(adapter);
+                    break;
+                case 1:
+                    //Log.d("继续加载数据完成", String.valueOf(msg.obj));
+                    if (!String.valueOf(msg.obj).equals("")) {
+                        ArrayList<videoListData> tempList = new utils(getContext()).parseJson_video(String.valueOf(msg.obj));
+                        listData.getVld().addAll(tempList);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case 2:
+                    if (!String.valueOf(msg.obj).equals("")) {
+                        ArrayList<videoListData> tempList = new utils(getContext()).parseJson_video(String.valueOf(msg.obj));
+                        listData.getVld().clear();
+                        listData.getVld().addAll(tempList);
+                        adapter.notifyDataSetChanged();
+                        swipeRefLayoutForVideo.setRefreshing(false);
+                        Toast.makeText(getContext(),"刷新完成",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
+                    }
+                    break;
+            }
+            isLoadingData=false;
+        }
+    }
+
 }

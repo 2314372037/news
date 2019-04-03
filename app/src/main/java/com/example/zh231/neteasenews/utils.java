@@ -133,7 +133,7 @@ public class utils {
                 stringBuffer.append(line);
             }
             con=stringBuffer.toString();
-        }catch (IOException e){
+        }catch (Exception e){
             e.printStackTrace();
         }
 //        OkHttpClient client = new OkHttpClient();
@@ -246,7 +246,7 @@ public class utils {
      * 解析网页上的文章
      * @param html
      */
-    public String parseHtml(String html) throws Throwable{
+    public String parseHtml(String html) {
 
         String main="";
         String pattern = "<main>[\\s\\S]*?</main>";
@@ -258,10 +258,11 @@ public class utils {
         if (matcher.find()){
             main=matcher.group();
         }
-        int s=main.indexOf("<div class=\"footer\">");//需要删除的节点开始处
-        int e=main.lastIndexOf("</div>");
+        String replceStr="<div class=\"more_up\">";
+        int s=main.indexOf(replceStr);//需要删除的节点开始处
+        int e=main.indexOf("</div>",s+replceStr.length());
         String delStr=main.substring(s,e+6);//待删除的节点,6为"</div>"的长度，直接写死了(懒(oﾟvﾟ)ノ)
-        main=main.replace(delStr,"");
+        //main=main.replace(delStr,"");//无效??
         return main;
     }
 

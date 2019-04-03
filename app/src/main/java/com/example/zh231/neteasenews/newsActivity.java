@@ -84,7 +84,7 @@ public class newsActivity extends AppCompatActivity {
                 public void run() {
                     String html=utils.sendGet(url,null);
                     //html=new utils(newsActivity.this).parseHtml(html);
-
+                    html=html.replaceAll("<div class=\"more_up\">\\s*?<span class=\"hiup_bar\">\\s*?<span class=\"al_title\">打开网易新闻，阅读体验更佳</span>\\s*?</span>\\s*?</div>","");
                     Message message=new Message();
                     message.what=0;
                     message.obj=html;

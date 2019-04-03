@@ -16,6 +16,7 @@ import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -289,6 +290,9 @@ public class utils {
      */
     public String readFile(final String fileName){
         String content="";
+        if (!new File(fileName).exists()){
+            return content;
+        }
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         try{
             FileInputStream inputStream = context.openFileInput(fileName);

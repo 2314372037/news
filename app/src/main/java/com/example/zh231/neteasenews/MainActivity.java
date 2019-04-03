@@ -21,8 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private fragment_video fv;
     private fragment_me fm;
 
-    private String TAG="MainActivity";
-
     FragmentTransaction fragmentTransaction;
 
     @Override
@@ -31,6 +29,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initView();
         initViewData();
+    }
+
+    @Override
+    protected void onStart() {//可见时设置状态栏，避免闪烁
+        super.onStart();
+        setStatusBarColor(android.R.color.holo_red_light);
     }
 
     private void setStatusBarColor(int colorId){
@@ -70,9 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化View数据
      */
     private void initViewData(){
-
-        setStatusBarColor(android.R.color.holo_red_light);
-
         tv_home.setOnClickListener(this);
         tv_video.setOnClickListener(this);
         tv_me.setOnClickListener(this);

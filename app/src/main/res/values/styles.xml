@@ -14,5 +14,13 @@
         <item name="android:drawablePadding">1dp</item>
         <item name="android:background">@color/transparent</item>
     </style>
+    
+    <style name="AppWelcome" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:background">@drawable/welcome</item>
+    </style>
 
 </resources>

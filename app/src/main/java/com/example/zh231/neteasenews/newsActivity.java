@@ -1,21 +1,16 @@
 package com.example.zh231.neteasenews;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
+import android.os.Bundle;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
-import java.lang.ref.WeakReference;
 
 public class newsActivity extends AppCompatActivity {
 
@@ -84,7 +79,11 @@ public class newsActivity extends AppCompatActivity {
                 public void run() {
                     String html=utils.sendGet(url,null);
                     //html=new utils(newsActivity.this).parseHtml(html);
-                    html=html.replaceAll("<div class=\"more_up\">\\s*?<span class=\"hiup_bar\">\\s*?<span class=\"al_title\">打开网易新闻，阅读体验更佳</span>\\s*?</span>\\s*?</div>","");
+                    try{
+                        html=html.replaceAll("<div class=\"more_up\">\\s*?<span class=\"hiup_bar\">\\s*?<span class=\"al_title\">打开网易新闻，阅读体验更佳</span>\\s*?</span>\\s*?</div>","");
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                     Message message=new Message();
                     message.what=0;
                     message.obj=html;

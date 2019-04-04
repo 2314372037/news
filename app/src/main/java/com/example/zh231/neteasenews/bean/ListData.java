@@ -8,6 +8,8 @@ public class ListData {
 
     private ArrayList<videoListData> vld;
 
+    private ArrayList<liveListData> lld;
+
     public ArrayList<homeListData> getHld() {
         return hld;
     }
@@ -16,11 +18,19 @@ public class ListData {
         return vld;
     }
 
+    public ArrayList<liveListData> getLld() {
+        return lld;
+    }
+
     public void setHld(ArrayList<homeListData> hld) {
         this.hld = hld;
     }
 
     public void setVld(ArrayList<videoListData> vld) {
         this.vld = vld;
+    }
+
+    public void setLld(ArrayList<liveListData> lld) {
+        this.lld = lld;
     }
 }

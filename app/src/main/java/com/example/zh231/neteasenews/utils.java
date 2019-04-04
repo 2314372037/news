@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.zh231.neteasenews.bean.homeListData;
+import com.example.zh231.neteasenews.bean.liveListData;
 import com.example.zh231.neteasenews.bean.videoListData;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -168,6 +169,11 @@ public class utils {
             json=json.replace("videoList(","");
             json=json.substring(0,json.length()-1);
         }
+        if (json.contains("previewlist")){//完整为previewlist_1(,数字会变,用正则匹配
+            //json=json.replace("previewlist_1(","");
+            json=json.replaceAll("previewlist(_)\\d{1,1}\\(","");
+            json=json.substring(0,json.length()-2);//后面比视频新闻列表多了";"
+        }
         return json;
     }
 
@@ -223,7 +229,7 @@ public class utils {
     /**
      * 解析视频数据
      * @param json
-     * @return videoTopic未使用，sparseArray的1为videoListData
+     * @return
      */
     public ArrayList<videoListData> parseJson_video(String json){
 
@@ -239,6 +245,29 @@ public class utils {
         for(JsonElement element : jsonArray){
             videoListData hld = gson.fromJson(element,videoListData.class);
             ListItem.add(hld);
+        }
+        return ListItem;
+    }
+
+    /**
+     * 解析直播数据
+     * @param json
+     * @return
+     */
+    public ArrayList<liveListData> parseJson_live(String json){
+        if (json==null){
+            return null;
+        }
+        JsonParser jsonParser=new JsonParser();
+        JsonObject jsonObject=jsonParser.parse(json).getAsJsonObject();
+        JsonArray jsonArray=jsonObject.getAsJsonArray("live_review");
+
+        Gson gson = new Gson();
+        ArrayList<liveListData> ListItem=new ArrayList<>();
+        for (JsonElement element:jsonArray){
+            liveListData lld=gson.fromJson(element,liveListData.class);
+            lld.setNextPage(jsonObject.get("nextPage").getAsInt());//下一个页面
+            ListItem.add(lld);
         }
         return ListItem;
     }

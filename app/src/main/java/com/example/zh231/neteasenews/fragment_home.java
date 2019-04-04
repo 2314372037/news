@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+
 import com.example.zh231.neteasenews.adapter.viewPagerAdapter;
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ public class fragment_home extends Fragment {
     private TabLayout homeTopLayout=null;
     private ViewPager viewPagerLayout=null;
     private Button search_Btn=null;
+    private ImageView liveBtn=null;
     private String args1Key="newsType";
 
     @Override
@@ -36,6 +39,17 @@ public class fragment_home extends Fragment {
         viewPagerLayout = view.findViewById(R.id.viewPagerLayout);
 
         search_Btn = view.findViewById(R.id.search_Btn);
+
+        liveBtn = view.findViewById(R.id.liveBtn);
+        liveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent();
+                intent.setClass(getContext(),liveActivity.class);
+                intent.putExtra("m3u8Url","http://pullhls1d41cc57.live.126.net/live/81c97163bb9d49bfa2923f94fadf1fa2/playlist.m3u8");//值为m3u8url
+                startActivity(intent);
+            }
+        });
 
         initData();
 

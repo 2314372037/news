@@ -36,6 +36,7 @@
                 android:background="@drawable/edittextbtn_layout" />
 
             <ImageView
+                android:id="@+id/liveBtn"
                 android:layout_width="105px"
                 android:layout_height="72px"
                 android:layout_alignParentEnd="true"

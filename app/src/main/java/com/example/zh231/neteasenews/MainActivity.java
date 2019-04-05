@@ -31,12 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initViewData();
     }
 
-    @Override
-    protected void onStart() {//可见时设置状态栏，避免闪烁
-        super.onStart();
-        setStatusBarColor(android.R.color.holo_red_light);
-    }
-
     private void setStatusBarColor(int colorId){
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -64,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化View
      */
     private void initView(){
+        setStatusBarColor(android.R.color.holo_red_light);
+
         tv_home=(TextView)findViewById(R.id.text_home);
         tv_video=(TextView)findViewById(R.id.text_video);
         tv_me=(TextView)findViewById(R.id.text_me);

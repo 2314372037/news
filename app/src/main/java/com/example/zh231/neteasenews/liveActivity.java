@@ -71,24 +71,23 @@ public class liveActivity extends AppCompatActivity {
         liveListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (listData.getLld().get(position).getSourceinfo()!=null){
-                    Toast.makeText(liveActivity.this,"json:"+listData.getLld().get(position).getSourceinfo(), Toast.LENGTH_SHORT).show();
-
-                }else if (listData.getLld().get(position).getVideos()!=null){//
-                    Toast.makeText(liveActivity.this,"json:"+listData.getLld().get(position).getVideos(), Toast.LENGTH_SHORT).show();
+                if (listData.getLld().get(position).getVideos()!=null){//
+                    Toast.makeText(liveActivity.this,"Videos-json:"+listData.getLld().get(position).getVideos(), Toast.LENGTH_SHORT).show();
                     JsonArray jsonArray =listData.getLld().get(position).getVideos();
                     String videoUrl;
                     JsonElement jsonElement =jsonArray.get(0);//默认第一个
                     JsonObject jsonObject = jsonElement.getAsJsonObject();
                     videoUrl=jsonObject.get("videoUrl").toString();
+
                     Log.d(TAG,videoUrl);
+
                     Intent intent=new Intent();
                     intent.setClass(liveActivity.this,videoActivity.class);
-                    intent.putExtra("url","");
+                    intent.putExtra("url",videoUrl);
                     startActivity(intent);
 
                 }else if (listData.getLld().get(position).getMatch_info()!=null){
-                    Toast.makeText(liveActivity.this,"json:"+listData.getLld().get(position).getMatch_info(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(liveActivity.this,"Match_info-json:"+listData.getLld().get(position).getMatch_info(), Toast.LENGTH_SHORT).show();
 
 //                    "match_info":{
 //                        "homeName":"勇士",
@@ -101,6 +100,8 @@ public class liveActivity extends AppCompatActivity {
 //                                "awayScore":102,
 //                                "status":"完场"
 //                    }
+                }else if (listData.getLld().get(position).getSourceinfo()!=null){
+                    Toast.makeText(liveActivity.this,"Sourceinfo-json:"+listData.getLld().get(position).getSourceinfo(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

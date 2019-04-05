@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -79,8 +80,11 @@ public class videoActivity extends AppCompatActivity {
 
     private void PlayVideoByUrl(String url) throws Throwable{
         if (!videoView.isPlaying()){
-            videoView.setVideoURI(Uri.parse(url));
+            //videoView.setVideoURI(Uri.parse(url));
+            videoView.setVideoPath(url);
+            videoView.setMediaController(new MediaController(this));
             videoView.start();
+            videoView.requestFocus();
             handler.post(run);
         }
     }

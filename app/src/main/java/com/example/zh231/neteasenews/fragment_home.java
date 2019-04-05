@@ -46,7 +46,6 @@ public class fragment_home extends Fragment {
             public void onClick(View v) {
                 Intent intent=new Intent();
                 intent.setClass(getContext(),liveActivity.class);
-                intent.putExtra("m3u8Url","http://pullhls1d41cc57.live.126.net/live/81c97163bb9d49bfa2923f94fadf1fa2/playlist.m3u8");//值为m3u8url
                 startActivity(intent);
             }
         });

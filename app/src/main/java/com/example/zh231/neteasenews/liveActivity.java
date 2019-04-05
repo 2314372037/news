@@ -21,21 +21,26 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.zh231.neteasenews.adapter.fragment_live_adapter;
 import com.example.zh231.neteasenews.bean.ListData;
 import com.example.zh231.neteasenews.bean.liveListData;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class liveActivity extends AppCompatActivity {
 
-    private SurfaceView surfaceview;
+    private VideoView videoViewForlive;
     private int nextList=1;//下一个要获取的列表索引
     private String liveListUrl="https://data.live.126.net/livechannel/previewlist/1.json?callback=previewlist_";
 
-    private final String TAG = "fragment_live_list";
+    private final String TAG = "liveActivity";
 
     private boolean isLoadingData=false;//是否在加载数据
     private ListView liveListView;
@@ -68,16 +73,35 @@ public class liveActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (listData.getLld().get(position).getSourceinfo()!=null){
                     Toast.makeText(liveActivity.this,"json:"+listData.getLld().get(position).getSourceinfo(), Toast.LENGTH_SHORT).show();
-                    //解析sourceinfo数据
-                }else if (listData.getLld().get(position).getVideos()!=null){
+
+                }else if (listData.getLld().get(position).getVideos()!=null){//
                     Toast.makeText(liveActivity.this,"json:"+listData.getLld().get(position).getVideos(), Toast.LENGTH_SHORT).show();
+                    JsonArray jsonArray =listData.getLld().get(position).getVideos();
+                    String videoUrl;
+                    JsonElement jsonElement =jsonArray.get(0);//默认第一个
+                    JsonObject jsonObject = jsonElement.getAsJsonObject();
+                    videoUrl=jsonObject.get("videoUrl").toString();
+                    Log.d(TAG,videoUrl);
+                    Intent intent=new Intent();
+                    intent.setClass(liveActivity.this,videoActivity.class);
+                    intent.putExtra("url","");
+                    startActivity(intent);
+
                 }else if (listData.getLld().get(position).getMatch_info()!=null){
                     Toast.makeText(liveActivity.this,"json:"+listData.getLld().get(position).getMatch_info(), Toast.LENGTH_SHORT).show();
-                }
 
-//                Intent intent = new Intent();
-//                intent.putExtra("url",listData.getLld().get(position).getSourceinfo());
-//                startActivity(intent);
+//                    "match_info":{
+//                        "homeName":"勇士",
+//                                "awayFlag":"https://cms-bucket.nosdn.127.net/sports/basketball/nba/team/1000000020.jpg",
+//                                "awayName":"掘金",
+//                                "homeScore":116,
+//                                "sourceName":"NBA",
+//                                "homeFlag":"https://cms-bucket.nosdn.127.net/sports/basketball/nba/team/1000000026.jpg",
+//                                "source":"nba",
+//                                "awayScore":102,
+//                                "status":"完场"
+//                    }
+                }
             }
         });
 
@@ -96,40 +120,6 @@ public class liveActivity extends AppCompatActivity {
                 }
             }
         });
-
-        Intent intent = getIntent();
-        Log.d("调试",intent.getStringExtra("m3u8Url"));
-
-//        MediaPlayer mediaPlayer=new MediaPlayer();
-//
-//        surfaceview=findViewById(R.id.surfaceview);
-//        SurfaceHolder holder = surfaceview.getHolder();
-//        holder.addCallback(new SurfaceHolder.Callback() {
-//            @Override
-//            public void surfaceCreated(SurfaceHolder holder) {//创建时
-//
-//            }
-//
-//            @Override
-//            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {//改变时
-//
-//            }
-//
-//            @Override
-//            public void surfaceDestroyed(SurfaceHolder holder) {//销毁时
-//
-//            }
-//        });
-//
-//        try{
-//            mediaPlayer.setDataSource(intent.getStringExtra("m3u8Url"));
-//            mediaPlayer.prepare();
-//            mediaPlayer.setDisplay(holder);
-//            mediaPlayer.start();
-//        }catch (IOException ioe){
-//            ioe.printStackTrace();
-//        }
-
     }
 
     protected void setDarkStatusIcon(boolean dark) {

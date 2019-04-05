@@ -27,6 +27,8 @@
 
             <Button
                 android:id="@+id/search_Btn"
+                android:text="热搜:国足排名下降"
+                android:textColor="#FFFFFF"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_centerVertical="true"

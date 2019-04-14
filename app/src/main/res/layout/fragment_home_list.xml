@@ -12,5 +12,11 @@
             android:layout_height="match_parent">
         </com.example.zh231.neteasenews.customView.homeListView>
     </android.support.v4.widget.SwipeRefreshLayout>
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:indeterminateTint="@color/mainColor"
+        android:layout_gravity="center"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 </FrameLayout>

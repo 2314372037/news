@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.zh231.neteasenews.adapter.fragment_home_adapter;
 import com.example.zh231.neteasenews.bean.ListData;
@@ -29,6 +30,7 @@ public class fragment_home_list extends Fragment {
     private int start=0;//逐层，
     private int end=20;//一次性获取的新闻条数 推荐20
     private String args1Key="newsType";
+    private ProgressBar progressBar;
 
     private boolean isLoadingData=false;//是否在加载数据
     private homeListView listView;
@@ -73,7 +75,6 @@ public class fragment_home_list extends Fragment {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Log.d(TAG,"刷新数据"+content);
                         break;
                 }
                 Message message=new Message();
@@ -91,6 +92,8 @@ public class fragment_home_list extends Fragment {
 
         listView = view.findViewById(R.id.newsListView);
 
+        progressBar=view.findViewById(R.id.progressBar);
+
         swipeRefLayout = view.findViewById(R.id.swipeRefLayout);
         swipeRefLayout.setColorSchemeResources(R.color.mainColor);
         swipeRefLayout.setProgressViewOffset(false,0,50);
@@ -103,6 +106,7 @@ public class fragment_home_list extends Fragment {
 
         currentNewsType=getArguments().getString(args1Key);
 
+        progressBar.setVisibility(View.VISIBLE);
         String con=new utils(getContext()).readFile(utils.fileName);//尝试读取本地文件
         if (con==null||con==""||con.isEmpty()){
             Log.d(TAG,"加载在线数据");
@@ -142,7 +146,7 @@ public class fragment_home_list extends Fragment {
         return view;
     }
 
-    private class homeHandle extends baseHandler{
+    private class homeHandle extends baseHandler {
 
         public homeHandle(Fragment fragment) {
             super(fragment);
@@ -150,47 +154,54 @@ public class fragment_home_list extends Fragment {
 
         @Override
         public void handleMessage(Message msg, int what) {
-            switch (msg.what){
+            switch (msg.what) {
                 case 0:
-                    Log.d("加载在线数据完成",String.valueOf(msg.obj));
-                    //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                    listData.setHld(new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType));
-                    adapter=new fragment_home_adapter<homeListData>(getContext(),listData.getHld());
-                    listView.setAdapter(adapter);
+                    Log.d("加载在线数据完成", String.valueOf(msg.obj));
+                    if (!String.valueOf(msg.obj).equals("")) {
+                        //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
+                        listData.setHld(new utils(getContext()).parseJson_home(String.valueOf(msg.obj), currentNewsType));
+                        adapter = new fragment_home_adapter<homeListData>(getContext(), listData.getHld());
+                        listView.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case 1:
-                    Log.d("加载本地数据完成",String.valueOf(msg.obj));
-                    listData.setHld(new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType));
-                    adapter=new fragment_home_adapter<homeListData>(getContext(),listData.getHld());
-                    listView.setAdapter(adapter);
+                    if (!String.valueOf(msg.obj).equals("")) {
+                        Log.d("加载本地数据完成", String.valueOf(msg.obj));
+                        listData.setHld(new utils(getContext()).parseJson_home(String.valueOf(msg.obj), currentNewsType));
+                        adapter = new fragment_home_adapter<homeListData>(getContext(), listData.getHld());
+                        listView.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(getContext(), "加载失败", Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case 2:
-                    Log.d("继续加载数据完成",String.valueOf(msg.obj));
-                    if (!String.valueOf(msg.obj).equals("")){
+                    Log.d("继续加载数据完成", String.valueOf(msg.obj));
+                    if (!String.valueOf(msg.obj).equals("")) {
                         //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                        ArrayList<homeListData> tempList= new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                        ArrayList<homeListData> tempList = new utils(getContext()).parseJson_home(String.valueOf(msg.obj), currentNewsType);
                         listData.getHld().addAll(tempList);
                         adapter.notifyDataSetChanged();
-                    }else{
-                        Toast.makeText(getContext(),"网络故障",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
                     }
                     break;
                 case 3:
-                    Log.d("刷新数据完成",String.valueOf(msg.obj));
-                    if (!String.valueOf(msg.obj).equals("")){
+                    if (!String.valueOf(msg.obj).equals("")) {
                         //new utils(context).saveFile(utils.fileName,String.valueOf(msg.obj));//每加载一次在线数据，就保存到本地
-                        ArrayList<homeListData> tempList= new utils(getContext()).parseJson_home(String.valueOf(msg.obj),currentNewsType);
+                        ArrayList<homeListData> tempList = new utils(getContext()).parseJson_home(String.valueOf(msg.obj), currentNewsType);
                         listData.getHld().clear();
                         listData.getHld().addAll(tempList);
                         adapter.notifyDataSetChanged();
                         swipeRefLayout.setRefreshing(false);
-                        Toast.makeText(getContext(),"刷新完成",Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(getContext(),"网络故障",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
                     }
                     break;
+            }
+            progressBar.setVisibility(View.GONE);
+            isLoadingData = false;
         }
-            isLoadingData=false;
-    }
     }
 }

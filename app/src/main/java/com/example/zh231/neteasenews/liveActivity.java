@@ -184,10 +184,14 @@ public class liveActivity extends AppCompatActivity {
         public void handleMessage(Message msg, int what) {
             switch (msg.what) {
                 case 0:
-                    listData.setLld(new utils(liveActivity.this).parseJson_live(String.valueOf(msg.obj)));
-                    adapter = new fragment_live_adapter<liveListData>(liveActivity.this, listData.getLld());
-                    liveListView.setAdapter(adapter);
-                    nextList=listData.getLld().get(0).getNextPage();//保存下一页索引
+                    if (!String.valueOf(msg.obj).equals("")) {
+                        listData.setLld(new utils(liveActivity.this).parseJson_live(String.valueOf(msg.obj)));
+                        adapter = new fragment_live_adapter<liveListData>(liveActivity.this, listData.getLld());
+                        liveListView.setAdapter(adapter);
+                        nextList=listData.getLld().get(0).getNextPage();//保存下一页索引
+                    } else {
+                        Toast.makeText(liveActivity.this, "网络故障", Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case 1:
                     if (!String.valueOf(msg.obj).equals("")) {

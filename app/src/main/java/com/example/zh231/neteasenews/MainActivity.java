@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView tv_home;
     private TextView tv_video;
     private TextView tv_me;
-    private RelativeLayout mainRootLayout;
 
     private fragment_home fh;
     private fragment_video fv;
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_home=(TextView)findViewById(R.id.text_home);
         tv_video=(TextView)findViewById(R.id.text_video);
         tv_me=(TextView)findViewById(R.id.text_me);
-        mainRootLayout=(RelativeLayout) findViewById(R.id.mainRootLayout);
     }
 
     /**

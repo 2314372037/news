@@ -183,6 +183,9 @@ public class utils {
      */
     public ArrayList<homeListData> parseJson_home(String json,String currentNewsType){
 
+        if(json==null||json.equals("")){
+            return null;
+        }
         JsonParser jsonParser=new JsonParser();
         JsonObject jsonObject=jsonParser.parse(json).getAsJsonObject();
         JsonArray jsonArray=jsonObject.getAsJsonArray(currentNewsType);

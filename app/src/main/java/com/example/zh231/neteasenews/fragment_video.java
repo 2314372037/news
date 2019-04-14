@@ -142,10 +142,14 @@ public class fragment_video extends Fragment {
         public void handleMessage(Message msg, int what) {
             switch (msg.what){
                 case 0:
-                    //Log.d("加载在线数据完成", String.valueOf(msg.obj));
-                    listData.setVld(new utils(getContext()).parseJson_video(String.valueOf(msg.obj)));
-                    adapter = new fragment_video_adapter<videoListData>(getContext(), listData.getVld());
-                    listView.setAdapter(adapter);
+                    if (!String.valueOf(msg.obj).equals("")) {
+                        //Log.d("加载在线数据完成", String.valueOf(msg.obj));
+                        listData.setVld(new utils(getContext()).parseJson_video(String.valueOf(msg.obj)));
+                        adapter = new fragment_video_adapter<videoListData>(getContext(), listData.getVld());
+                        listView.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(getContext(), "网络故障", Toast.LENGTH_LONG).show();
+                    }
                     break;
                 case 1:
                     //Log.d("继续加载数据完成", String.valueOf(msg.obj));
